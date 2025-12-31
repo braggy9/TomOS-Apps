@@ -16,6 +16,7 @@
 		F1000013 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000014 /* APIService.swift */; };
 		F1000015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1000016 /* Assets.xcassets */; };
 		F1000030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000031 /* AppDelegate.swift */; };
+		F1000033 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000034 /* NotificationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		F1000017 /* TomOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TomOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1000031 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F1000032 /* TomOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TomOS.entitlements; sourceTree = "<group>"; };
+		F1000034 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +50,7 @@
 			children = (
 				F1000002 /* TomOSApp.swift */,
 				F1000031 /* AppDelegate.swift */,
+				F1000034 /* NotificationManager.swift */,
 				F1000004 /* ContentView.swift */,
 				F1000006 /* BrainDumpView.swift */,
 				F1000008 /* SmartSurfaceView.swift */,
@@ -143,6 +146,7 @@
 			files = (
 				F1000001 /* TomOSApp.swift in Sources */,
 				F1000030 /* AppDelegate.swift in Sources */,
+				F1000033 /* NotificationManager.swift in Sources */,
 				F1000003 /* ContentView.swift in Sources */,
 				F1000005 /* BrainDumpView.swift in Sources */,
 				F1000007 /* SmartSurfaceView.swift in Sources */,
