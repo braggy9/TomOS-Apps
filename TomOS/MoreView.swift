@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MoreView: View {
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     HStack {

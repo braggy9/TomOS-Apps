@@ -7,7 +7,7 @@ struct QuickActionsView: View {
     @State private var successMessage = ""
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     Button(action: sendMorningOverview) {

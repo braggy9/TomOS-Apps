@@ -97,6 +97,68 @@ class APIService {
             UIApplication.shared.open(url)
         }
     }
+
+    // MARK: - Device Registration (APNs)
+
+    /// Registers this device's APNs token with the backend.
+    /// The backend stores this token and uses it to send push notifications via APNs.
+    ///
+    /// - Parameter token: The APNs device token as a hex string
+    /// - Throws: Network or decoding errors
+    func registerDevice(token: String) async throws {
+        let url = URL(string: "\(baseURL)/api/register-device")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        // Build registration payload
+        let body: [String: Any] = [
+            "device_token": token,
+            "platform": "ios",
+            "bundle_id": "com.tomos.ios",
+            "app_version": Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        ]
+
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        print("📡 APIService: Registering device token with backend...")
+        print("   Endpoint: \(url.absoluteString)")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse {
+            print("📡 APIService: Registration response status: \(httpResponse.statusCode)")
+
+            if httpResponse.statusCode >= 200 && httpResponse.statusCode < 300 {
+                // Try to decode success response
+                if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                    print("✅ APIService: Device registered successfully")
+                    if let message = json["message"] as? String {
+                        print("   Server message: \(message)")
+                    }
+                }
+            } else {
+                // Log error response
+                let errorBody = String(data: data, encoding: .utf8) ?? "No response body"
+                print("❌ APIService: Registration failed with status \(httpResponse.statusCode)")
+                print("   Response: \(errorBody)")
+                throw APIError.registrationFailed(statusCode: httpResponse.statusCode)
+            }
+        }
+    }
+}
+
+// MARK: - API Errors
+
+enum APIError: LocalizedError {
+    case registrationFailed(statusCode: Int)
+
+    var errorDescription: String? {
+        switch self {
+        case .registrationFailed(let statusCode):
+            return "Device registration failed with status code: \(statusCode)"
+        }
+    }
 }
 
 // MARK: - Response Models

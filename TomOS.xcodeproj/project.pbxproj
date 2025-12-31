@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F1000001 /* TomOSiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000002 /* TomOSiOSApp.swift */; };
+		F1000001 /* TomOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000002 /* TomOSApp.swift */; };
 		F1000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000004 /* ContentView.swift */; };
 		F1000005 /* BrainDumpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000006 /* BrainDumpView.swift */; };
 		F1000007 /* SmartSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000008 /* SmartSurfaceView.swift */; };
@@ -15,10 +15,11 @@
 		F1000011 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000012 /* MoreView.swift */; };
 		F1000013 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000014 /* APIService.swift */; };
 		F1000015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1000016 /* Assets.xcassets */; };
+		F1000030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000031 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F1000002 /* TomOSiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomOSiOSApp.swift; sourceTree = "<group>"; };
+		F1000002 /* TomOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomOSApp.swift; sourceTree = "<group>"; };
 		F1000004 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F1000006 /* BrainDumpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrainDumpView.swift; sourceTree = "<group>"; };
 		F1000008 /* SmartSurfaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartSurfaceView.swift; sourceTree = "<group>"; };
@@ -27,6 +28,8 @@
 		F1000014 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		F1000016 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F1000017 /* TomOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TomOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1000031 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F1000032 /* TomOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TomOS.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,10 +43,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F1000019 /* TomOSiOS */ = {
+		F1000019 /* TomOS */ = {
 			isa = PBXGroup;
 			children = (
-				F1000002 /* TomOSiOSApp.swift */,
+				F1000002 /* TomOSApp.swift */,
+				F1000031 /* AppDelegate.swift */,
 				F1000004 /* ContentView.swift */,
 				F1000006 /* BrainDumpView.swift */,
 				F1000008 /* SmartSurfaceView.swift */,
@@ -51,8 +55,9 @@
 				F1000012 /* MoreView.swift */,
 				F1000014 /* APIService.swift */,
 				F1000016 /* Assets.xcassets */,
+				F1000032 /* TomOS.entitlements */,
 			);
-			path = TomOSiOS;
+			path = TomOS;
 			sourceTree = "<group>";
 		};
 		F1000020 /* Products */ = {
@@ -66,7 +71,7 @@
 		F1000021 = {
 			isa = PBXGroup;
 			children = (
-				F1000019 /* TomOSiOS */,
+				F1000019 /* TomOS */,
 				F1000020 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -102,7 +107,7 @@
 				LastUpgradeCheck = 2620;
 				ORGANIZATIONNAME = TomOS;
 			};
-			buildConfigurationList = F1000027 /* Build configuration list for PBXProject "TomOSiOS" */;
+			buildConfigurationList = F1000027 /* Build configuration list for PBXProject "TomOS" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -136,7 +141,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F1000001 /* TomOSiOSApp.swift in Sources */,
+				F1000001 /* TomOSApp.swift in Sources */,
+				F1000030 /* AppDelegate.swift in Sources */,
 				F1000003 /* ContentView.swift in Sources */,
 				F1000005 /* BrainDumpView.swift in Sources */,
 				F1000007 /* SmartSurfaceView.swift in Sources */,
@@ -174,6 +180,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = TomOS/TomOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
@@ -190,6 +197,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -237,6 +245,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = TomOS/TomOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
@@ -252,6 +261,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -288,7 +298,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1000027 /* Build configuration list for PBXProject "TomOSiOS" */ = {
+		F1000027 /* Build configuration list for PBXProject "TomOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1000028 /* Debug */,
