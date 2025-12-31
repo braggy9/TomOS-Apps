@@ -1,6 +1,13 @@
 import Foundation
-import UIKit
 
+#if os(iOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
+
+/// Cross-platform API service for TomOS.
+/// Works on both iOS and macOS with platform-specific URL handling.
 class APIService {
     static let shared = APIService()
     private let baseURL = "https://tomos-task-api.vercel.app"
@@ -92,10 +99,17 @@ class APIService {
     }
 
     // MARK: - Dashboard
+
+    /// Opens the TomOS web dashboard in the default browser.
+    /// Uses platform-specific URL opening: UIKit on iOS, AppKit on macOS.
     func openDashboard() {
-        if let url = URL(string: baseURL) {
-            UIApplication.shared.open(url)
-        }
+        guard let url = URL(string: baseURL) else { return }
+
+        #if os(iOS)
+        UIApplication.shared.open(url)
+        #elseif os(macOS)
+        NSWorkspace.shared.open(url)
+        #endif
     }
 
     // MARK: - Device Registration (APNs)
@@ -111,11 +125,17 @@ class APIService {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        // Build registration payload
+        // Build registration payload with platform detection
+        #if os(iOS)
+        let platform = "ios"
+        #elseif os(macOS)
+        let platform = "macos"
+        #endif
+
         let body: [String: Any] = [
             "device_token": token,
-            "platform": "ios",
-            "bundle_id": "com.tomos.ios",
+            "platform": platform,
+            "bundle_id": Bundle.main.bundleIdentifier ?? "com.tomos.app",
             "app_version": Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
         ]
 

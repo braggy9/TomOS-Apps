@@ -52,7 +52,7 @@ struct BrainDumpView: View {
                     TextEditor(text: $tasksText)
                         .frame(minHeight: 200)
                         .padding(4)
-                        .background(Color(.systemGray6))
+                        .background(Color.secondarySystemBackground)
                         .cornerRadius(8)
                 }
                 .padding(.horizontal)
@@ -79,7 +79,9 @@ struct BrainDumpView: View {
 
                 Spacer()
             }
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .alert("Success!", isPresented: $showSuccess) {
                 Button("OK") {
                     tasksText = ""

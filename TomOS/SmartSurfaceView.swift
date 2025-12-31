@@ -97,7 +97,9 @@ struct SmartSurfaceView: View {
                 }
                 .padding(.vertical)
             }
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .alert("Error", isPresented: .constant(errorMessage != nil)) {
                 Button("OK") {
                     errorMessage = nil
@@ -166,7 +168,7 @@ struct RecommendationCard: View {
                 .foregroundColor(.secondary)
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.secondarySystemBackground)
         .cornerRadius(12)
     }
 
