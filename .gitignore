@@ -1,0 +1,39 @@
+# Xcode - Build products
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Secrets - NEVER commit these!
+*.p8
+*.p12
+*.mobileprovision
+.env
+.env.local
+secrets.json
+notion-api-key.txt
+device-tokens.json
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Claude Code
+.claude/
+.claude-code/
+
+# Logs
+*.log
+
+# Backup files
+*~
+*.backup
+*.bak
