@@ -1,6 +1,7 @@
 #if os(macOS)
 import SwiftUI
 import AppKit
+import UserNotifications
 
 /// MenuBarController manages the macOS menu bar interface for TomOS.
 ///
@@ -12,20 +13,34 @@ import AppKit
 /// │ 🔴 [Urgent Task 2]          │
 /// │ 🟡 [Important Task 1]       │
 /// ├─────────────────────────────┤
-/// │ ➕ New Task...              │
-/// │ 🧠 Brain Dump               │
-/// │ 💭 What Should I Work On?   │
+/// │ ➕ New Task...         ⌘⌥T  │
+/// │ 🧠 Brain Dump          ⌘⌥1  │
+/// │ 💭 What Should I Work On? ⌘⌥2│
 /// ├─────────────────────────────┤
-/// │ 📊 Open Dashboard           │
-/// │ ⚙️  Preferences             │
+/// │ 📨 Morning Overview    ⌘⌥3  │
+/// │ 📨 EOD Summary         ⌘⌥4  │
 /// ├─────────────────────────────┤
-/// │ ❌ Quit TomOS               │
+/// │ 📊 Open Dashboard      ⌘⌥5  │
+/// │ ⚙️  Preferences              │
+/// ├─────────────────────────────┤
+/// │ ❌ Quit TomOS          ⌘⌥Q  │
 /// └─────────────────────────────┘
+///
+/// ## Global Shortcuts (⌘⌥ pattern):
+/// - ⌘⌥T - Quick Task Capture
+/// - ⌘⌥1 - Brain Dump
+/// - ⌘⌥2 - What Should I Work On?
+/// - ⌘⌥3 - Send Morning Overview
+/// - ⌘⌥4 - Send EOD Summary
+/// - ⌘⌥5 - Open Dashboard
+/// - ⌘⌥M - Show Menu Dropdown
+/// - ⌘⌥Q - Quit TomOS
 ///
 /// ## Architecture:
 /// - Uses NSStatusItem for the menu bar icon
 /// - NSMenu with NSMenuItem for the dropdown
 /// - Integrates with existing SwiftUI views via NSWindow
+/// - GlobalShortcutManager handles system-wide hotkeys
 ///
 class MenuBarController: ObservableObject {
 
@@ -46,6 +61,9 @@ class MenuBarController: ObservableObject {
 
     /// Window for brain dump quick entry
     private var brainDumpWindow: NSWindow?
+
+    /// Window for smart surface (What Should I Work On?)
+    private var smartSurfaceWindow: NSWindow?
 
     /// Window for quick task entry
     private var quickEntryWindow: NSWindow?
@@ -85,6 +103,9 @@ class MenuBarController: ObservableObject {
         buildMenu()
         statusItem?.menu = menu
 
+        // Register global keyboard shortcuts
+        GlobalShortcutManager.shared.registerShortcuts()
+
         // Fetch initial tasks
         refreshTasks()
 
@@ -113,27 +134,34 @@ class MenuBarController: ObservableObject {
 
         menu?.addItem(NSMenuItem.separator())
 
-        // Quick Actions
-        let newTaskItem = NSMenuItem(title: "➕ New Task...", action: #selector(openQuickEntry), keyEquivalent: "n")
-        newTaskItem.keyEquivalentModifierMask = [.command]
+        // Quick Actions with global shortcuts shown
+        let newTaskItem = NSMenuItem(title: "➕ Quick Capture                ⌘⌥T", action: #selector(openQuickEntry), keyEquivalent: "")
         newTaskItem.target = self
         menu?.addItem(newTaskItem)
 
-        let brainDumpItem = NSMenuItem(title: "🧠 Brain Dump", action: #selector(openBrainDump), keyEquivalent: "b")
-        brainDumpItem.keyEquivalentModifierMask = [.command]
+        let brainDumpItem = NSMenuItem(title: "🧠 Brain Dump                   ⌘⌥1", action: #selector(openBrainDump), keyEquivalent: "")
         brainDumpItem.target = self
         menu?.addItem(brainDumpItem)
 
-        let smartSurfaceItem = NSMenuItem(title: "💭 What Should I Work On?", action: #selector(openSmartSurface), keyEquivalent: "w")
-        smartSurfaceItem.keyEquivalentModifierMask = [.command]
+        let smartSurfaceItem = NSMenuItem(title: "💭 What Should I Work On?       ⌘⌥2", action: #selector(openSmartSurface), keyEquivalent: "")
         smartSurfaceItem.target = self
         menu?.addItem(smartSurfaceItem)
 
         menu?.addItem(NSMenuItem.separator())
 
+        // Notification Actions
+        let morningItem = NSMenuItem(title: "📨 Send Morning Overview        ⌘⌥3", action: #selector(sendMorningOverviewAction), keyEquivalent: "")
+        morningItem.target = self
+        menu?.addItem(morningItem)
+
+        let eodItem = NSMenuItem(title: "📨 Send EOD Summary             ⌘⌥4", action: #selector(sendEODSummaryAction), keyEquivalent: "")
+        eodItem.target = self
+        menu?.addItem(eodItem)
+
+        menu?.addItem(NSMenuItem.separator())
+
         // Dashboard & Preferences
-        let dashboardItem = NSMenuItem(title: "📊 Open Dashboard", action: #selector(openDashboard), keyEquivalent: "d")
-        dashboardItem.keyEquivalentModifierMask = [.command]
+        let dashboardItem = NSMenuItem(title: "📊 Open Dashboard               ⌘⌥5", action: #selector(openDashboard), keyEquivalent: "")
         dashboardItem.target = self
         menu?.addItem(dashboardItem)
 
@@ -150,8 +178,7 @@ class MenuBarController: ObservableObject {
         refreshItem.target = self
         menu?.addItem(refreshItem)
 
-        let quitItem = NSMenuItem(title: "❌ Quit TomOS", action: #selector(quitApp), keyEquivalent: "q")
-        quitItem.keyEquivalentModifierMask = [.command]
+        let quitItem = NSMenuItem(title: "❌ Quit TomOS                   ⌘⌥Q", action: #selector(quitApp), keyEquivalent: "")
         quitItem.target = self
         menu?.addItem(quitItem)
     }
@@ -221,6 +248,24 @@ class MenuBarController: ObservableObject {
         }
     }
 
+    /// Flashes the menu bar icon briefly to provide visual feedback
+    func flashMenuBarIcon() {
+        guard let button = statusItem?.button else { return }
+
+        // Store original state
+        let originalImage = button.image
+
+        // Flash to a highlighted version
+        button.image = NSImage(systemSymbolName: "brain.head.profile.fill", accessibilityDescription: "TomOS Active")
+        button.image?.isTemplate = true
+
+        // Restore after a brief moment
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            button.image = originalImage
+            button.image?.isTemplate = true
+        }
+    }
+
     // MARK: - Task Fetching
 
     /// Fetches priority tasks from the API
@@ -279,33 +324,15 @@ class MenuBarController: ObservableObject {
     }
 
     @objc private func openBrainDump() {
-        print("🧠 MenuBarController: Opening brain dump...")
-        showWindow(
-            content: BrainDumpView(),
-            title: "Brain Dump",
-            size: NSSize(width: 500, height: 500),
-            window: &brainDumpWindow
-        )
+        showBrainDump()
     }
 
     @objc private func openSmartSurface() {
-        print("💭 MenuBarController: Opening smart surface...")
-        showWindow(
-            content: SmartSurfaceView(),
-            title: "What Should I Work On?",
-            size: NSSize(width: 600, height: 700),
-            window: &dashboardWindow
-        )
+        showSmartSurface()
     }
 
     @objc private func openDashboard() {
-        print("📊 MenuBarController: Opening dashboard...")
-        showWindow(
-            content: ContentView(),
-            title: "TomOS Dashboard",
-            size: NSSize(width: 800, height: 600),
-            window: &dashboardWindow
-        )
+        showDashboard()
     }
 
     @objc private func openPreferences() {
@@ -323,13 +350,128 @@ class MenuBarController: ObservableObject {
         print("📋 MenuBarController: Opening task: \(task.title)")
 
         // For now, open the dashboard to the task
-        // TODO: Implement deep linking to specific task
-        openDashboard()
+        showDashboard()
     }
 
     @objc private func quitApp() {
         print("👋 MenuBarController: Quitting app...")
+        GlobalShortcutManager.shared.unregisterShortcuts()
         NSApplication.shared.terminate(nil)
+    }
+
+    @objc private func sendMorningOverviewAction() {
+        sendMorningOverview()
+    }
+
+    @objc private func sendEODSummaryAction() {
+        sendEODSummary()
+    }
+
+    // MARK: - Public API for Global Shortcuts
+
+    /// Shows the Brain Dump window (called by GlobalShortcutManager)
+    func showBrainDump() {
+        print("🧠 MenuBarController: Opening brain dump...")
+        showWindow(
+            content: BrainDumpView(),
+            title: "Brain Dump",
+            size: NSSize(width: 500, height: 500),
+            window: &brainDumpWindow
+        )
+    }
+
+    /// Shows the Smart Surface window (called by GlobalShortcutManager)
+    func showSmartSurface() {
+        print("💭 MenuBarController: Opening smart surface...")
+        showWindow(
+            content: SmartSurfaceView(),
+            title: "What Should I Work On?",
+            size: NSSize(width: 600, height: 700),
+            window: &smartSurfaceWindow
+        )
+    }
+
+    /// Shows the Dashboard window (called by GlobalShortcutManager)
+    func showDashboard() {
+        print("📊 MenuBarController: Opening dashboard...")
+        showWindow(
+            content: ContentView(),
+            title: "TomOS Dashboard",
+            size: NSSize(width: 800, height: 600),
+            window: &dashboardWindow
+        )
+    }
+
+    /// Programmatically shows the menu bar dropdown (called by GlobalShortcutManager)
+    func showMenuDropdown() {
+        print("📋 MenuBarController: Showing menu dropdown...")
+        guard let button = statusItem?.button else {
+            print("❌ MenuBarController: No status item button available")
+            return
+        }
+
+        // Perform click on the status item button to show menu
+        button.performClick(nil)
+    }
+
+    /// Sends the morning overview notification
+    func sendMorningOverview() {
+        print("📨 MenuBarController: Sending morning overview...")
+
+        Task {
+            do {
+                try await APIService.shared.sendMorningOverview()
+                await MainActor.run {
+                    self.showNotification(title: "Morning Overview", body: "Check your notifications!")
+                }
+                print("✅ MenuBarController: Morning overview sent")
+            } catch {
+                print("❌ MenuBarController: Failed to send morning overview: \(error)")
+                await MainActor.run {
+                    self.showNotification(title: "Error", body: "Failed to send morning overview")
+                }
+            }
+        }
+    }
+
+    /// Sends the EOD summary notification
+    func sendEODSummary() {
+        print("📨 MenuBarController: Sending EOD summary...")
+
+        Task {
+            do {
+                try await APIService.shared.sendEODSummary()
+                await MainActor.run {
+                    self.showNotification(title: "EOD Summary", body: "Check your notifications!")
+                }
+                print("✅ MenuBarController: EOD summary sent")
+            } catch {
+                print("❌ MenuBarController: Failed to send EOD summary: \(error)")
+                await MainActor.run {
+                    self.showNotification(title: "Error", body: "Failed to send EOD summary")
+                }
+            }
+        }
+    }
+
+    /// Shows a local notification
+    private func showNotification(title: String, body: String) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = .default
+
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: nil
+        )
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("❌ MenuBarController: Failed to show notification: \(error)")
+            }
+        }
     }
 
     // MARK: - Window Management
@@ -368,13 +510,19 @@ class MenuBarController: ObservableObject {
 
     // MARK: - Cleanup
 
-    /// Removes the menu bar icon. Call when app is terminating.
+    /// Removes the menu bar icon and unregisters shortcuts. Call when app is terminating.
     func cleanup() {
+        // Unregister global shortcuts
+        GlobalShortcutManager.shared.unregisterShortcuts()
+
+        // Remove status item
         if let statusItem = statusItem {
             NSStatusBar.system.removeStatusItem(statusItem)
         }
         statusItem = nil
         menu = nil
+
+        print("🧹 MenuBarController: Cleanup complete")
     }
 }
 
