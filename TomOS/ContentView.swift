@@ -1,5 +1,13 @@
 import SwiftUI
 
+// MARK: - Notification Names for Navigation (Siri, Widgets, etc.)
+
+extension Notification.Name {
+    static let openBrainDump = Notification.Name("openBrainDump")
+    static let openSmartSurface = Notification.Name("openSmartSurface")
+    static let openQuickCapture = Notification.Name("openQuickCapture")
+}
+
 struct ContentView: View {
     @State private var selectedTab = 0
 
@@ -30,6 +38,12 @@ struct ContentView: View {
                 .tag(3)
         }
         .tint(.purple)
+        .onReceive(NotificationCenter.default.publisher(for: .openBrainDump)) { _ in
+            selectedTab = 0
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openSmartSurface)) { _ in
+            selectedTab = 1
+        }
     }
 }
 

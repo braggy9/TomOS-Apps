@@ -326,6 +326,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         print("🖥️ TomOS macOS: App launched, setting up notifications...")
+        print("🖥️ TomOS macOS: Bundle ID = \(Bundle.main.bundleIdentifier ?? "unknown")")
 
         // Set ourselves as the notification center delegate
         UNUserNotificationCenter.current().delegate = self
@@ -333,11 +334,56 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         // Register notification categories
         registerNotificationCategories()
 
+        // Check current notification settings first
+        checkCurrentNotificationStatus()
+
         // Request permission and register for push notifications
         requestNotificationPermission()
 
         // Clear badge when app launches
         clearBadge()
+    }
+
+    private func checkCurrentNotificationStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            print("🔍 TomOS macOS: Current notification settings:")
+            print("   Authorization Status: \(self.authStatusString(settings.authorizationStatus))")
+            print("   Alert Setting: \(self.settingString(settings.alertSetting))")
+            print("   Badge Setting: \(self.settingString(settings.badgeSetting))")
+            print("   Sound Setting: \(self.settingString(settings.soundSetting))")
+
+            // If already authorized, try to register immediately
+            if settings.authorizationStatus == .authorized {
+                print("✅ TomOS macOS: Already authorized, registering with APNs...")
+                DispatchQueue.main.async {
+                    NSApplication.shared.registerForRemoteNotifications()
+                }
+            } else if settings.authorizationStatus == .denied {
+                print("❌ TomOS macOS: Notifications DENIED - user must enable in System Settings")
+            } else if settings.authorizationStatus == .notDetermined {
+                print("⚠️ TomOS macOS: Notification permission not yet requested")
+            }
+        }
+    }
+
+    private func authStatusString(_ status: UNAuthorizationStatus) -> String {
+        switch status {
+        case .notDetermined: return "Not Determined"
+        case .denied: return "DENIED"
+        case .authorized: return "Authorized"
+        case .provisional: return "Provisional"
+        case .ephemeral: return "Ephemeral"
+        @unknown default: return "Unknown"
+        }
+    }
+
+    private func settingString(_ setting: UNNotificationSetting) -> String {
+        switch setting {
+        case .notSupported: return "Not Supported"
+        case .disabled: return "Disabled"
+        case .enabled: return "Enabled"
+        @unknown default: return "Unknown"
+        }
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
@@ -423,6 +469,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     ) {
         print("❌ TomOS macOS: Failed to register for remote notifications")
         print("   Error: \(error.localizedDescription)")
+        print("   Full error: \(error)")
+        print("   Error domain: \((error as NSError).domain)")
+        print("   Error code: \((error as NSError).code)")
+        if let underlyingError = (error as NSError).userInfo[NSUnderlyingErrorKey] as? Error {
+            print("   Underlying error: \(underlyingError)")
+        }
+        print("💡 TomOS macOS: Check that:")
+        print("   1. Push Notifications capability is enabled in Xcode Signing & Capabilities")
+        print("   2. App is signed with a provisioning profile that has Push Notifications")
+        print("   3. aps-environment entitlement is set in TomOS.macOS.entitlements")
     }
 
     // MARK: - Backend Registration
