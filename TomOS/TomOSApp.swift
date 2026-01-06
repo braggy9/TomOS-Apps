@@ -48,6 +48,9 @@ struct TomOSApp: App {
         // iOS: Standard WindowGroup with ContentView (tab interface)
         WindowGroup {
             ContentView()
+                .onOpenURL { url in
+                    handleURL(url)
+                }
         }
 
         #elseif os(macOS)
@@ -67,8 +70,12 @@ struct TomOSApp: App {
         WindowGroup("TomOS Dashboard", id: "dashboard") {
             ContentView()
                 .frame(minWidth: 700, minHeight: 500)
+                .onOpenURL { url in
+                    handleURL(url)
+                }
         }
         .defaultSize(width: 800, height: 600)
+        .handlesExternalEvents(matching: Set(arrayLiteral: "*"))
         .commands {
             // Add custom menu bar commands
             CommandGroup(replacing: .newItem) {
@@ -84,6 +91,77 @@ struct TomOSApp: App {
                 }
                 .keyboardShortcut("r", modifiers: [.command])
             }
+        }
+        #endif
+    }
+
+    // MARK: - URL Scheme Handling
+
+    /// Handles incoming URLs with the `tomos://` scheme.
+    ///
+    /// ## Supported URLs:
+    /// - `tomos://capture` - Open Quick Capture window
+    /// - `tomos://braindump` - Open Brain Dump view
+    /// - `tomos://smartsurface` - Open What Should I Work On?
+    /// - `tomos://morning` - Send Morning Overview
+    /// - `tomos://eod` - Send EOD Summary
+    /// - `tomos://tasks` - Open Notion Tasks
+    ///
+    /// ## Usage from Raycast/Alfred:
+    /// ```bash
+    /// open "tomos://capture"
+    /// ```
+    private func handleURL(_ url: URL) {
+        guard url.scheme == "tomos" else { return }
+
+        let action = url.host ?? ""
+        print("🔗 TomOS URL: \(url) → action: \(action)")
+
+        #if os(macOS)
+        switch action {
+        case "capture":
+            // Open Quick Capture window
+            GlobalShortcutManager.shared.triggerQuickCapture()
+
+        case "email":
+            // Capture from Outlook email
+            GlobalShortcutManager.shared.triggerEmailCapture()
+
+        case "braindump":
+            MenuBarController.shared.showBrainDump()
+
+        case "smartsurface", "whatnext":
+            MenuBarController.shared.showSmartSurface()
+
+        case "morning":
+            MenuBarController.shared.sendMorningOverview()
+
+        case "eod":
+            MenuBarController.shared.sendEODSummary()
+
+        case "dashboard":
+            MenuBarController.shared.showDashboard()
+
+        case "tasks":
+            // Open Notion Tasks database
+            if let notionURL = URL(string: "notion://") {
+                NSWorkspace.shared.open(notionURL)
+            }
+
+        default:
+            print("⚠️ Unknown URL action: \(action)")
+        }
+
+        #elseif os(iOS)
+        switch action {
+        case "capture", "braindump":
+            NotificationCenter.default.post(name: .openBrainDump, object: nil)
+
+        case "smartsurface", "whatnext":
+            NotificationCenter.default.post(name: .openSmartSurface, object: nil)
+
+        default:
+            print("⚠️ Unknown URL action: \(action)")
         }
         #endif
     }

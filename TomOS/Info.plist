@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.tomos.app</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tomos</string>
+			</array>
+		</dict>
+	</array>
+	<key>NSCalendarsUsageDescription</key>
+	<string>TomOS needs access to your calendar to view upcoming meetings and help you create preparation tasks for scheduled events.</string>
+</dict>
+</plist>

@@ -110,11 +110,21 @@ struct BrainDumpView: View {
                     taskCount = response.taskCount
                     isLoading = false
                     showSuccess = true
+
+                    // Haptic feedback on success
+                    #if os(iOS)
+                    HapticManager.shared.taskAdded()
+                    #endif
                 }
             } catch {
                 await MainActor.run {
                     errorMessage = "Failed to create tasks: \(error.localizedDescription)"
                     isLoading = false
+
+                    // Error haptic
+                    #if os(iOS)
+                    HapticManager.shared.error()
+                    #endif
                 }
             }
         }

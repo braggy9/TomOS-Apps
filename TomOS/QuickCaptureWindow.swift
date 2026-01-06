@@ -13,6 +13,7 @@ import UserNotifications
 /// - Posts to /api/task
 /// - Shows success notification
 /// - Auto-closes after successful submit
+/// - Supports pre-filled text (e.g., from Outlook email subject)
 ///
 class QuickCaptureWindowController {
 
@@ -20,6 +21,7 @@ class QuickCaptureWindowController {
 
     private var window: NSWindow?
     private var hostingController: NSHostingController<QuickCaptureView>?
+    private var initialText: String = ""
 
     // MARK: - Initialization
 
@@ -30,10 +32,13 @@ class QuickCaptureWindowController {
     // MARK: - Window Management
 
     /// Shows the quick capture window, creating it if needed
-    func showWindow() {
-        if window == nil {
-            createWindow()
-        }
+    /// - Parameter prefillText: Optional text to pre-fill the text field
+    func showWindow(prefillText: String? = nil) {
+        // Store the initial text
+        initialText = prefillText ?? ""
+
+        // Always recreate window to ensure fresh state with new prefill text
+        createWindow()
 
         guard let window = window else { return }
 
@@ -58,7 +63,7 @@ class QuickCaptureWindowController {
             window.makeFirstResponder(window.contentView)
         }
 
-        print("📝 QuickCaptureWindowController: Window shown")
+        print("📝 QuickCaptureWindowController: Window shown\(prefillText != nil ? " with prefill: \(prefillText!)" : "")")
     }
 
     /// Hides and resets the quick capture window
@@ -69,10 +74,13 @@ class QuickCaptureWindowController {
 
     /// Creates the NSWindow with SwiftUI content
     private func createWindow() {
-        // Create the SwiftUI view with close handler
-        let quickCaptureView = QuickCaptureView { [weak self] in
-            self?.hideWindow()
-        }
+        // Create the SwiftUI view with close handler and initial text
+        let quickCaptureView = QuickCaptureView(
+            initialText: initialText,
+            onClose: { [weak self] in
+                self?.hideWindow()
+            }
+        )
 
         // Create hosting controller
         hostingController = NSHostingController(rootView: quickCaptureView)
@@ -107,6 +115,9 @@ class QuickCaptureWindowController {
 
 /// QuickCaptureView is the SwiftUI content for the floating quick capture window.
 struct QuickCaptureView: View {
+    /// Initial text to pre-fill (e.g., from Outlook email subject)
+    let initialText: String
+
     @State private var taskText = ""
     @State private var isLoading = false
     @State private var showError = false
@@ -115,6 +126,13 @@ struct QuickCaptureView: View {
 
     /// Closure called when the window should close
     var onClose: () -> Void
+
+    init(initialText: String = "", onClose: @escaping () -> Void) {
+        self.initialText = initialText
+        self.onClose = onClose
+        // Initialize taskText with initialText
+        _taskText = State(initialValue: initialText)
+    }
 
     var body: some View {
         VStack(spacing: 12) {

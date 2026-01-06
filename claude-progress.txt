@@ -1,0 +1,119 @@
+# TomOS-Apps Progress Tracker
+
+Track work sessions and completed phases here. Commit this file to Git!
+
+## Current Phase
+
+**Phase 6:** Global keyboard shortcuts (⌘⌥ pattern)
+
+**Status:** Planning
+**Started:** TBD
+**Target Features:**
+- [ ] ⌘⌥T - Quick Task Capture (floating window)
+- [ ] ⌘⌥1 - Brain Dump
+- [ ] ⌘⌥2 - What Should I Work On?
+- [ ] ⌘⌥3 - Send Morning Overview
+- [ ] ⌘⌥4 - Send EOD Summary
+- [ ] ⌘⌥5 - Open Dashboard
+- [ ] ⌘⌥M - Show Menu Dropdown
+- [ ] ⌘⌥Q - Quit
+
+---
+
+## Completed Phases
+
+### Phase 5: macOS Push Notifications (2026-01-01)
+**Commit:** TBD
+**Key Fix:** macOS requires `com.apple.developer.aps-environment` (not just `aps-environment`)
+**Features:**
+- ✅ macOS APNs device registration working
+- ✅ Push notifications received on macOS
+- ✅ Created macOS-specific provisioning profile
+- ✅ Fixed TomOS.macOS.entitlements with correct key
+- ✅ App installed in /Applications
+- ✅ Auto-start on login configured
+
+**Registered Devices:**
+- iOS: `f757db2b408a19ec...`
+- macOS: `025aeb1d4d823d33...`
+
+### Phase 4: macOS Support (2026-01-01)
+**Commit:** a4fb0a6
+**Features:**
+- ✅ MenuBarController.swift
+- ✅ Menu bar interface
+- ✅ Cross-platform compatibility
+
+### Phase 3: Local Notifications (2026-01-01)
+**Commit:** de6a1ff  
+**Features:**
+- ✅ NotificationManager.swift
+- ✅ Local notification scheduler
+- ✅ Offline reminder support
+- ✅ Sydney timezone handling
+
+### Phase 2B: Notification Handling (2026-01-01)
+**Commit:** b9a4586  
+**Features:**
+- ✅ UNUserNotificationCenterDelegate
+- ✅ Notification action buttons (Complete, Snooze, View)
+- ✅ Action response handling
+
+### Phase 2A: APNs Registration (2026-01-01)
+**Commit:** (part of Phase 2B)  
+**Features:**
+- ✅ AppDelegate.swift APNs registration
+- ✅ Device token handling
+- ✅ Backend communication
+
+### Phase 1: Build Fixes (2026-01-01)
+**Commit:** 117a598  
+**Features:**
+- ✅ Deprecated API updates (NavigationView → NavigationStack)
+- ✅ Xcode compatibility fixes
+
+---
+
+## Session Notes
+
+### 2026-01-01: macOS Push Notifications Fixed
+- Diagnosed OSStatus error 13 ("Application not properly entitled")
+- Found provisioning profile was iOS-only, created macOS profile in Developer Portal
+- Discovered critical difference: macOS uses `com.apple.developer.aps-environment` (not `aps-environment`)
+- Fixed TomOS.macOS.entitlements with correct key
+- Both iOS and macOS devices now registered and receiving push notifications
+- Installed app to /Applications/TomOS.app
+- Configured auto-start on login via Login Items
+- Updated all project documentation
+
+### 2026-01-01: Repository Cleanup
+- Renamed TomOSiOS → TomOS-Apps on GitHub
+- Updated local git remote
+- Reorganized Desktop (created TomOS-Archive/)
+- Created CLAUDE.md documentation structure
+- Added RELATED_REPOS.md for multi-repo coordination
+
+### Next Session
+- Implement global keyboard shortcuts (Phase 6)
+- Consider widget support
+
+---
+
+## Known Issues
+
+- [x] APNs requires physical device (Simulator not supported) - WORKING
+- [x] Need to test notification actions on device - TESTED
+- [x] NOTION_DEVICE_TOKENS_DB_ID not yet set in Vercel - SET
+
+**Current:** No blocking issues
+
+---
+
+## Future Enhancements
+
+- [ ] Global keyboard shortcuts (Phase 6)
+- [ ] Customizable keyboard shortcuts in Preferences
+- [ ] Widget support (iOS/macOS)
+- [ ] Siri Shortcuts donation
+- [ ] Watch app integration
+- [ ] iPad multitasking optimization

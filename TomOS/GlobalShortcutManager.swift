@@ -11,6 +11,7 @@ import UserNotifications
 /// | Shortcut | Action                      |
 /// |----------|----------------------------|
 /// | ⌘⌥T      | Quick Task Capture         |
+/// | ⌘⌥E      | Email to Task (Outlook)    |
 /// | ⌘⌥1      | Brain Dump                 |
 /// | ⌘⌥2      | What Should I Work On?     |
 /// | ⌘⌥3      | Send Morning Overview      |
@@ -69,6 +70,7 @@ class GlobalShortcutManager {
 
         print("✅ GlobalShortcutManager: Shortcuts registered")
         print("   ⌘⌥T - Quick Task Capture")
+        print("   ⌘⌥E - Email to Task (Outlook)")
         print("   ⌘⌥1 - Brain Dump")
         print("   ⌘⌥2 - What Should I Work On?")
         print("   ⌘⌥3 - Send Morning Overview")
@@ -113,6 +115,11 @@ class GlobalShortcutManager {
             showQuickCapture()
             return true
 
+        case kVK_ANSI_E:  // ⌘⌥E - Email to Task (Outlook)
+            print("⌨️ Shortcut: ⌘⌥E - Email to Task (Outlook)")
+            captureEmailAsTask()
+            return true
+
         case kVK_ANSI_1:  // ⌘⌥1 - Brain Dump
             print("⌨️ Shortcut: ⌘⌥1 - Brain Dump")
             openBrainDump()
@@ -153,16 +160,82 @@ class GlobalShortcutManager {
         }
     }
 
+    // MARK: - Public API for URL Scheme
+
+    /// Triggers Quick Capture from URL scheme (tomos://capture)
+    func triggerQuickCapture() {
+        showQuickCapture()
+    }
+
+    /// Triggers Email Capture from URL scheme (tomos://email)
+    func triggerEmailCapture() {
+        captureEmailAsTask()
+    }
+
     // MARK: - Shortcut Actions
 
     /// Shows the quick task capture floating window (⌘⌥T)
-    private func showQuickCapture() {
+    /// - Parameter prefillText: Optional text to pre-fill the text field
+    private func showQuickCapture(prefillText: String? = nil) {
         DispatchQueue.main.async {
             if self.quickCaptureWindowController == nil {
                 self.quickCaptureWindowController = QuickCaptureWindowController()
             }
-            self.quickCaptureWindowController?.showWindow()
+            self.quickCaptureWindowController?.showWindow(prefillText: prefillText)
             self.showVisualFeedback("Quick Capture")
+        }
+    }
+
+    /// Captures the selected email subject from Outlook and opens Quick Capture (⌘⌥E)
+    private func captureEmailAsTask() {
+        DispatchQueue.main.async {
+            // AppleScript to get selected email subject from Microsoft Outlook
+            let script = """
+            tell application "Microsoft Outlook"
+                try
+                    set selectedMessages to selected objects
+                    if (count of selectedMessages) > 0 then
+                        set theMessage to item 1 of selectedMessages
+                        set theSubject to subject of theMessage
+                        return theSubject
+                    else
+                        return ""
+                    end if
+                on error
+                    return ""
+                end try
+            end tell
+            """
+
+            var error: NSDictionary?
+            if let appleScript = NSAppleScript(source: script) {
+                let result = appleScript.executeAndReturnError(&error)
+
+                if let emailSubject = result.stringValue, !emailSubject.isEmpty {
+                    print("📧 Got email subject: \(emailSubject)")
+                    self.showQuickCapture(prefillText: emailSubject)
+                } else if let error = error {
+                    print("❌ AppleScript error: \(error)")
+                    // Still show quick capture, but empty
+                    self.showQuickCapture()
+                    self.showNotification(
+                        title: "Outlook Not Available",
+                        body: "Select an email in Outlook and try again"
+                    )
+                } else {
+                    print("⚠️ No email selected in Outlook")
+                    self.showQuickCapture()
+                    self.showNotification(
+                        title: "No Email Selected",
+                        body: "Select an email in Outlook first"
+                    )
+                }
+            } else {
+                print("❌ Failed to create AppleScript")
+                self.showQuickCapture()
+            }
+
+            self.showVisualFeedback("Email to Task")
         }
     }
 
@@ -284,6 +357,7 @@ class GlobalShortcutManager {
 /// Virtual key codes for macOS keyboard
 /// These match the values from Carbon.HIToolbox
 private let kVK_ANSI_T: UInt16 = 0x11
+private let kVK_ANSI_E: UInt16 = 0x0E
 private let kVK_ANSI_1: UInt16 = 0x12
 private let kVK_ANSI_2: UInt16 = 0x13
 private let kVK_ANSI_3: UInt16 = 0x14

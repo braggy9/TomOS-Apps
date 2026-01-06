@@ -160,6 +160,13 @@ class MenuBarController: ObservableObject {
 
         menu?.addItem(NSMenuItem.separator())
 
+        // View All Tasks in Notion
+        let viewTasksItem = NSMenuItem(title: "📋 View All Tasks in Notion", action: #selector(openNotionTasks), keyEquivalent: "")
+        viewTasksItem.target = self
+        menu?.addItem(viewTasksItem)
+
+        menu?.addItem(NSMenuItem.separator())
+
         // Dashboard & Preferences
         let dashboardItem = NSMenuItem(title: "📊 Open Dashboard               ⌘⌥5", action: #selector(openDashboard), keyEquivalent: "")
         dashboardItem.target = self
@@ -333,6 +340,15 @@ class MenuBarController: ObservableObject {
 
     @objc private func openDashboard() {
         showDashboard()
+    }
+
+    @objc private func openNotionTasks() {
+        print("📋 MenuBarController: Opening Notion Tasks...")
+        // Opens Notion app with the Tasks database
+        // Using Notion's URL scheme - the Tasks database will open
+        if let url = URL(string: "notion://www.notion.so") {
+            NSWorkspace.shared.open(url)
+        }
     }
 
     @objc private func openPreferences() {
@@ -621,39 +637,189 @@ struct QuickEntryView: View {
 
 // MARK: - Preferences View
 
-/// Placeholder preferences view for macOS
+/// Preferences view for macOS showing system status
 struct PreferencesView: View {
+    @State private var apnsStatus: APNsStatus = .checking
+    @State private var notificationStatus: String = "Checking..."
+
     var body: some View {
         VStack(spacing: 20) {
-            Image(systemName: "gearshape.2")
-                .font(.system(size: 50))
-                .foregroundStyle(.secondary)
+            // Header
+            HStack {
+                Image(systemName: "gearshape.2.fill")
+                    .font(.system(size: 32))
+                    .foregroundStyle(.purple)
+                Text("TomOS Preferences")
+                    .font(.title2.bold())
+            }
 
-            Text("TomOS Preferences")
-                .font(.title2)
+            Divider()
 
-            Text("Preferences coming soon...")
-                .foregroundStyle(.secondary)
+            // APNs Status Section
+            GroupBox("Push Notifications (APNs)") {
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Circle()
+                            .fill(apnsStatus.color)
+                            .frame(width: 10, height: 10)
+                        Text("Device Registration")
+                            .fontWeight(.medium)
+                        Spacer()
+                        Text(apnsStatus.description)
+                            .foregroundStyle(apnsStatus == .registered ? .green : .secondary)
+                    }
+
+                    HStack {
+                        Circle()
+                            .fill(notificationStatus == "Authorized" ? .green : .orange)
+                            .frame(width: 10, height: 10)
+                        Text("Notification Permission")
+                            .fontWeight(.medium)
+                        Spacer()
+                        Text(notificationStatus)
+                            .foregroundStyle(notificationStatus == "Authorized" ? .green : .orange)
+                    }
+
+                    if apnsStatus == .notRegistered {
+                        HStack {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundStyle(.orange)
+                            Text("Device not registered. Restart app to retry.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    if apnsStatus == .registered {
+                        if let token = UserDefaults.standard.string(forKey: "apns_device_token_macos") {
+                            HStack {
+                                Text("Token:")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                Text(String(token.prefix(16)) + "...")
+                                    .font(.system(.caption, design: .monospaced))
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+
+            // System Info
+            GroupBox("System Information") {
+                VStack(spacing: 8) {
+                    HStack {
+                        Text("API Endpoint")
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text("tomos-task-api.vercel.app")
+                            .font(.system(.caption, design: .monospaced))
+                    }
+
+                    HStack {
+                        Text("Platform")
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text("macOS")
+                    }
+
+                    HStack {
+                        Text("Build Version")
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "Unknown")
+                    }
+
+                    HStack {
+                        Text("App Version")
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0")
+                    }
+                }
+                .padding(.vertical, 4)
+            }
 
             Spacer()
 
-            HStack {
-                Text("API Endpoint")
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Text("tomos-task-api.vercel.app")
-                    .font(.system(.body, design: .monospaced))
-            }
-
-            HStack {
-                Text("Platform")
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Text("macOS")
+            // Keyboard Shortcuts Reference
+            GroupBox("Keyboard Shortcuts") {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Use ⌘⌥ (Command+Option) + key:")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    HStack {
+                        Text("T: Quick Capture  •  1: Brain Dump  •  2: What Next?")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    HStack {
+                        Text("3: Morning  •  4: EOD  •  5: Dashboard  •  Q: Quit")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.vertical, 4)
             }
         }
         .padding()
-        .frame(minWidth: 400, minHeight: 250)
+        .frame(minWidth: 450, minHeight: 380)
+        .onAppear {
+            checkAPNsStatus()
+            checkNotificationPermission()
+        }
+    }
+
+    private func checkAPNsStatus() {
+        if let token = UserDefaults.standard.string(forKey: "apns_device_token_macos"), !token.isEmpty {
+            apnsStatus = .registered
+        } else {
+            apnsStatus = .notRegistered
+        }
+    }
+
+    private func checkNotificationPermission() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                switch settings.authorizationStatus {
+                case .authorized:
+                    notificationStatus = "Authorized"
+                case .denied:
+                    notificationStatus = "Denied"
+                case .notDetermined:
+                    notificationStatus = "Not Requested"
+                case .provisional:
+                    notificationStatus = "Provisional"
+                case .ephemeral:
+                    notificationStatus = "Ephemeral"
+                @unknown default:
+                    notificationStatus = "Unknown"
+                }
+            }
+        }
+    }
+}
+
+enum APNsStatus {
+    case checking
+    case registered
+    case notRegistered
+
+    var description: String {
+        switch self {
+        case .checking: return "Checking..."
+        case .registered: return "Registered"
+        case .notRegistered: return "Not Registered"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .checking: return .gray
+        case .registered: return .green
+        case .notRegistered: return .orange
+        }
     }
 }
 

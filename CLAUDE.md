@@ -14,7 +14,7 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 **GitHub:** `github.com/braggy9/TomOS-Apps.git` (Private)
 **Related Repo:** [TomOS API](/Users/tombragg/Desktop/Projects/TomOS/) - Vercel backend
 
-## Current Status (Updated 2026-01-01)
+## Current Status (Updated 2026-01-03)
 
 ### Completed
 - ✅ iOS app with push notifications working
@@ -25,6 +25,13 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 - ✅ Notification action buttons (Complete, Snooze, View)
 - ✅ macOS app installed in /Applications
 - ✅ Auto-start on login configured
+- ✅ Siri App Intents integration (iOS)
+- ✅ Share Extension - "Add to TomOS" from any app
+- ✅ Home Screen Widget - Small, Medium, Lock Screen
+- ✅ Live Activities - Dynamic Island & Lock Screen (iOS 16.2+)
+- ✅ Interactive Widget - Complete/Snooze from widget (iOS 17+)
+- ✅ Focus Filters - Auto-filter tasks by Focus mode (iOS 16+)
+- ✅ Calendar Sync - View events, create prep tasks (iOS 16+)
 
 ### Registered Devices
 - **iOS:** `f757db2b408a19ec...`
@@ -47,9 +54,22 @@ TomOS-Apps/
 │   ├── QuickCaptureWindow.swift    # Floating quick capture (⌘⌥T)
 │   ├── NotificationManager.swift   # Local notifications
 │   ├── APIService.swift            # Backend communication
+│   ├── AppIntents.swift            # Siri integration (iOS 16+)
+│   ├── LiveActivityManager.swift   # Dynamic Island/Lock Screen (iOS 16.2+)
+│   ├── FocusFilter.swift           # Focus mode integration (iOS 16+)
+│   ├── CalendarManager.swift       # EventKit calendar sync
 │   ├── TomOS.entitlements          # iOS entitlements
 │   ├── TomOS.macOS.entitlements    # macOS entitlements
 │   └── Assets.xcassets/            # App icons
+├── TomOSShare/                     # Share Extension
+│   ├── ShareViewController.swift   # Share sheet UI
+│   ├── Info.plist
+│   └── TomOSShare.entitlements
+├── TomOSWidget/                    # Widget Extension (iOS 17+)
+│   ├── TomOSWidget.swift           # All widget views
+│   ├── Info.plist
+│   ├── TomOSWidget.entitlements
+│   └── Assets.xcassets/
 ├── TomOS.xcodeproj/
 └── .env.local                      # Secrets (gitignored)
 ```
@@ -57,11 +77,18 @@ TomOS-Apps/
 ## Key Features
 
 - **Quick Capture:** Add tasks via Siri/Shortcuts/Menu bar/⌘⌥T
-- **Global Hotkeys:** System-wide ⌘⌥ shortcuts (1-5, T, M, Q)
+- **Global Hotkeys:** System-wide ⌘⌥ shortcuts (1-5, T, M, Q) [macOS]
 - **Push Notifications:** Native APNs integration (no third-party services)
 - **Local Notifications:** Work offline with reminders
 - **Menu Bar App:** macOS quick access with task count badge
 - **Cross-Platform:** Shared codebase for iOS/iPadOS/macOS
+- **Share Extension:** Add tasks from any app via share sheet [iOS]
+- **Home Screen Widget:** Quick task view with 4 sizes [iOS 17+]
+- **Interactive Widget:** Complete/Snooze tasks directly from widget [iOS 17+]
+- **Live Activities:** Current task on Dynamic Island & Lock Screen [iOS 16.2+]
+- **Focus Filters:** Auto-show tasks matching Focus mode [iOS 16+]
+- **Calendar Sync:** View meetings, create prep tasks from calendar [iOS 16+]
+- **Siri Integration:** "Add task to TomOS", "What should I work on?" [iOS]
 
 ## APNs Configuration
 
@@ -113,6 +140,41 @@ APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -path "*/Debug/TomOS.app" 
 rm -rf /Applications/TomOS.app && cp -R "$APP_PATH" /Applications/TomOS.app
 ```
 
+## Install on Work MBP (No Xcode)
+
+**Pre-built app package:** Available in OneDrive at `~/OneDrive - Publicis Groupe/TomOS-Setup/`
+
+### One-Command Install:
+```bash
+bash "$HOME/OneDrive - Publicis Groupe/TomOS-Setup/install-tomos-work-mac.sh"
+```
+
+**What it does:**
+- Extracts pre-built `TomOS.app` from zip
+- Installs to `~/Applications/TomOS.app` (no admin rights needed)
+- Re-signs app with ad-hoc signature for work Mac
+- Removes quarantine attributes
+- Sets up auto-start on login
+- Launches the app
+
+**Included Features:**
+- ⌘⌥E - Email to Task (Outlook integration)
+- ⌘⌥T - Quick Task Capture
+- ⌘⌥1-5 - Brain Dump, Smart Surface, Notifications, Dashboard
+- ⌘⌥M - Menu Bar, ⌘⌥Q - Quit
+- Full push notification support
+- Share Extension
+- Menu bar with task counts
+
+**Prerequisites:**
+- OneDrive syncing the `TomOS-Setup` folder
+- Grant Accessibility permission when prompted (for global shortcuts)
+
+**Uninstall old version first:**
+```bash
+bash "$HOME/OneDrive - Publicis Groupe/TomOS-Setup/uninstall-old-tomoscapture.sh"
+```
+
 ## Provisioning Profiles
 
 **iOS:** Managed by Xcode (automatic signing)
@@ -129,7 +191,10 @@ rm -rf /Applications/TomOS.app && cp -R "$APP_PATH" /Applications/TomOS.app
 ✅ **Phase 4:** macOS menu bar support
 ✅ **Phase 5:** macOS push notifications working
 ✅ **Phase 6:** Global keyboard shortcuts (⌘⌥ pattern)
-⏳ **Phase 7:** Feature consolidation from old apps
+✅ **Phase 7:** iOS Siri App Intents integration
+✅ **Phase 8:** iOS Share Extension ("Add to TomOS")
+✅ **Phase 9:** iOS Home Screen & Lock Screen Widget
+⏳ **Phase 10:** Feature consolidation from old apps
 
 ## Global Keyboard Shortcuts
 
@@ -153,6 +218,34 @@ All shortcuts use ⌘⌥ (Command + Option) pattern:
 
 **Note:** Requires Accessibility permissions on macOS for global hotkeys to work.
 
+## iOS Siri Commands
+
+The App Intents framework enables Siri voice commands on iOS 16+:
+
+| Siri Command | Action |
+|--------------|--------|
+| "Add [task] to TomOS" | Quick task capture via voice |
+| "Open brain dump in TomOS" | Navigate to Brain Dump view |
+| "What should I work on?" | Get AI-recommended next task |
+| "Send my morning overview" | Trigger morning notification |
+| "Send EOD summary" | Trigger end-of-day summary |
+
+**Implementation:** `TomOS/AppIntents.swift`
+
+## iOS Widget
+
+Home Screen and Lock Screen widgets showing top task:
+
+| Widget Size | Features |
+|-------------|----------|
+| Small (2x2) | Top task + Quick Add button |
+| Medium (4x2) | Top task + Quick Add + task count |
+| Circular (Lock Screen) | Quick Add tap target |
+| Rectangular (Lock Screen) | Top task preview |
+
+**Implementation:** `TomOSWidget/TomOSWidget.swift`
+**Minimum iOS:** 17.0 (for containerBackground API)
+
 ## User Context
 
 **User:** Tom Bragg
@@ -173,4 +266,4 @@ All shortcuts use ⌘⌥ (Command + Option) pattern:
 
 ---
 
-*Last updated: 2026-01-02*
+*Last updated: 2026-01-03*

@@ -82,7 +82,81 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         // Clear badge when app launches
         clearBadge()
 
+        // Setup Quick Actions (app icon long-press menu)
+        setupQuickActions(for: application)
+
         return true
+    }
+
+    // MARK: - Quick Actions (Home Screen Shortcuts)
+
+    private func setupQuickActions(for application: UIApplication) {
+        let addTaskAction = UIApplicationShortcutItem(
+            type: "com.tomos.app.quickadd",
+            localizedTitle: "Add Task",
+            localizedSubtitle: "Quick capture a task",
+            icon: UIApplicationShortcutIcon(systemImageName: "plus.circle.fill"),
+            userInfo: nil
+        )
+
+        let brainDumpAction = UIApplicationShortcutItem(
+            type: "com.tomos.app.braindump",
+            localizedTitle: "Brain Dump",
+            localizedSubtitle: "Batch add multiple tasks",
+            icon: UIApplicationShortcutIcon(systemImageName: "brain.head.profile"),
+            userInfo: nil
+        )
+
+        let whatNextAction = UIApplicationShortcutItem(
+            type: "com.tomos.app.whatnext",
+            localizedTitle: "What's Next?",
+            localizedSubtitle: "AI-powered recommendations",
+            icon: UIApplicationShortcutIcon(systemImageName: "target"),
+            userInfo: nil
+        )
+
+        let morningAction = UIApplicationShortcutItem(
+            type: "com.tomos.app.morning",
+            localizedTitle: "Morning Overview",
+            localizedSubtitle: "Start your day",
+            icon: UIApplicationShortcutIcon(systemImageName: "sun.max.fill"),
+            userInfo: nil
+        )
+
+        application.shortcutItems = [addTaskAction, brainDumpAction, whatNextAction, morningAction]
+        print("📱 TomOS: Quick Actions registered")
+    }
+
+    func application(
+        _ application: UIApplication,
+        performActionFor shortcutItem: UIApplicationShortcutItem,
+        completionHandler: @escaping (Bool) -> Void
+    ) {
+        let handled = handleQuickAction(shortcutItem)
+        completionHandler(handled)
+    }
+
+    private func handleQuickAction(_ shortcutItem: UIApplicationShortcutItem) -> Bool {
+        print("📱 TomOS: Quick Action triggered: \(shortcutItem.type)")
+
+        switch shortcutItem.type {
+        case "com.tomos.app.quickadd":
+            NotificationCenter.default.post(name: .openQuickAdd, object: nil)
+            return true
+        case "com.tomos.app.braindump":
+            NotificationCenter.default.post(name: .openBrainDump, object: nil)
+            return true
+        case "com.tomos.app.whatnext":
+            NotificationCenter.default.post(name: .openSmartSurface, object: nil)
+            return true
+        case "com.tomos.app.morning":
+            Task {
+                try? await APIService.shared.sendMorningOverview()
+            }
+            return true
+        default:
+            return false
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -157,6 +231,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         print("🎉 TomOS iOS: APNs device token received!")
         print("📋 Token: \(tokenString)")
 
+        // Save token locally for status verification
+        UserDefaults.standard.set(tokenString, forKey: "apns_device_token")
+
         Task {
             await registerDeviceWithBackend(token: tokenString)
         }
@@ -168,6 +245,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     ) {
         print("❌ TomOS iOS: Failed to register for remote notifications")
         print("   Error: \(error.localizedDescription)")
+
+        // Clear any stale token
+        UserDefaults.standard.removeObject(forKey: "apns_device_token")
 
         #if targetEnvironment(simulator)
         print("💡 TomOS: Push notifications require additional setup on Simulator")
@@ -458,6 +538,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         print("🎉 TomOS macOS: APNs device token received!")
         print("📋 Token: \(tokenString)")
 
+        // Save token locally for status verification
+        UserDefaults.standard.set(tokenString, forKey: "apns_device_token_macos")
+
         Task {
             await registerDeviceWithBackend(token: tokenString)
         }
@@ -479,6 +562,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         print("   1. Push Notifications capability is enabled in Xcode Signing & Capabilities")
         print("   2. App is signed with a provisioning profile that has Push Notifications")
         print("   3. aps-environment entitlement is set in TomOS.macOS.entitlements")
+
+        // Clear any stale token
+        UserDefaults.standard.removeObject(forKey: "apns_device_token_macos")
     }
 
     // MARK: - Backend Registration

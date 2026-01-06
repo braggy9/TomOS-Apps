@@ -6,6 +6,7 @@ extension Notification.Name {
     static let openBrainDump = Notification.Name("openBrainDump")
     static let openSmartSurface = Notification.Name("openSmartSurface")
     static let openQuickCapture = Notification.Name("openQuickCapture")
+    static let openQuickAdd = Notification.Name("openQuickAdd")
 }
 
 struct ContentView: View {
@@ -31,11 +32,19 @@ struct ContentView: View {
                 }
                 .tag(2)
 
+            NavigationStack {
+                CalendarSyncView()
+            }
+            .tabItem {
+                Label("Calendar", systemImage: "calendar")
+            }
+            .tag(3)
+
             MoreView()
                 .tabItem {
                     Label("More", systemImage: "ellipsis.circle")
                 }
-                .tag(3)
+                .tag(4)
         }
         .tint(.purple)
         .onReceive(NotificationCenter.default.publisher(for: .openBrainDump)) { _ in
@@ -43,6 +52,10 @@ struct ContentView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: .openSmartSurface)) { _ in
             selectedTab = 1
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openQuickAdd)) { _ in
+            // Quick Add opens Brain Dump for fast task entry
+            selectedTab = 0
         }
     }
 }

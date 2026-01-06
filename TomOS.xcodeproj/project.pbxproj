@@ -21,7 +21,49 @@
 		F1000038 /* GlobalShortcutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000039 /* GlobalShortcutManager.swift */; };
 		F1000040 /* QuickCaptureWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000041 /* QuickCaptureWindow.swift */; };
 		F1000042 /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000043 /* AppIntents.swift */; };
+		F1000044 /* LiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000045 /* LiveActivityManager.swift */; };
+		F1000046 /* FocusFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000047 /* FocusFilter.swift */; };
+		F1000048 /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000049 /* CalendarManager.swift */; };
+		F1000060 /* M365CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000061 /* M365CalendarManager.swift */; };
+		F1000062 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000063 /* HapticManager.swift */; };
+		F2000001 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2000002 /* ShareViewController.swift */; };
+		F2000010 /* TomOSShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F2000003 /* TomOSShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F3000001 /* TomOSWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3000002 /* TomOSWidget.swift */; };
+		F3000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F3000004 /* Assets.xcassets */; };
+		F3000010 /* TomOSWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F3000005 /* TomOSWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F2000011 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F1000026 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F2000020;
+			remoteInfo = TomOSShare;
+		};
+		F3000011 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F1000026 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F3000020;
+			remoteInfo = TomOSWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F1000050 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F2000010 /* TomOSShare.appex in Embed Foundation Extensions */,
+				F3000010 /* TomOSWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		F1000002 /* TomOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomOSApp.swift; sourceTree = "<group>"; };
@@ -41,10 +83,38 @@
 		F1000039 /* GlobalShortcutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalShortcutManager.swift; sourceTree = "<group>"; };
 		F1000041 /* QuickCaptureWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickCaptureWindow.swift; sourceTree = "<group>"; };
 		F1000043 /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
+		F1000045 /* LiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityManager.swift; sourceTree = "<group>"; };
+		F1000047 /* FocusFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusFilter.swift; sourceTree = "<group>"; };
+		F1000049 /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
+		F1000061 /* M365CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M365CalendarManager.swift; sourceTree = "<group>"; };
+		F1000063 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		F2000002 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		F2000003 /* TomOSShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TomOSShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3000002 /* TomOSWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomOSWidget.swift; sourceTree = "<group>"; };
+		F3000004 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F3000005 /* TomOSWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TomOSWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3000006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F2000006 /* TomOSShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TomOSShare.entitlements; sourceTree = "<group>"; };
+		F3000008 /* TomOSWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TomOSWidget.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		F1000018 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F2000030 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3000030 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -60,6 +130,11 @@
 				F1000002 /* TomOSApp.swift */,
 				F1000031 /* AppDelegate.swift */,
 				F1000043 /* AppIntents.swift */,
+				F1000045 /* LiveActivityManager.swift */,
+				F1000047 /* FocusFilter.swift */,
+				F1000049 /* CalendarManager.swift */,
+				F1000061 /* M365CalendarManager.swift */,
+				F1000063 /* HapticManager.swift */,
 				F1000034 /* NotificationManager.swift */,
 				F1000036 /* MenuBarController.swift */,
 				F1000039 /* GlobalShortcutManager.swift */,
@@ -81,6 +156,8 @@
 			isa = PBXGroup;
 			children = (
 				F1000017 /* TomOS.app */,
+				F2000003 /* TomOSShare.appex */,
+				F3000005 /* TomOSWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -89,8 +166,31 @@
 			isa = PBXGroup;
 			children = (
 				F1000019 /* TomOS */,
+				F2000005 /* TomOSShare */,
+				F3000007 /* TomOSWidget */,
 				F1000020 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		F2000005 /* TomOSShare */ = {
+			isa = PBXGroup;
+			children = (
+				F2000002 /* ShareViewController.swift */,
+				F2000004 /* Info.plist */,
+				F2000006 /* TomOSShare.entitlements */,
+			);
+			path = TomOSShare;
+			sourceTree = "<group>";
+		};
+		F3000007 /* TomOSWidget */ = {
+			isa = PBXGroup;
+			children = (
+				F3000002 /* TomOSWidget.swift */,
+				F3000004 /* Assets.xcassets */,
+				F3000006 /* Info.plist */,
+				F3000008 /* TomOSWidget.entitlements */,
+			);
+			path = TomOSWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -103,15 +203,52 @@
 				F1000024 /* Sources */,
 				F1000018 /* Frameworks */,
 				F1000025 /* Resources */,
+				F1000050 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				F2000012 /* PBXTargetDependency */,
+				F3000012 /* PBXTargetDependency */,
 			);
 			name = TomOS;
 			productName = TomOS;
 			productReference = F1000017 /* TomOS.app */;
 			productType = "com.apple.product-type.application";
+		};
+		F2000020 /* TomOSShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F2000021 /* Build configuration list for PBXNativeTarget "TomOSShare" */;
+			buildPhases = (
+				F2000031 /* Sources */,
+				F2000030 /* Frameworks */,
+				F2000032 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TomOSShare;
+			productName = TomOSShare;
+			productReference = F2000003 /* TomOSShare.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		F3000020 /* TomOSWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3000021 /* Build configuration list for PBXNativeTarget "TomOSWidgetExtension" */;
+			buildPhases = (
+				F3000031 /* Sources */,
+				F3000030 /* Frameworks */,
+				F3000032 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TomOSWidgetExtension;
+			productName = TomOSWidgetExtension;
+			productReference = F3000005 /* TomOSWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -123,6 +260,14 @@
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 2620;
 				ORGANIZATIONNAME = TomOS;
+				TargetAttributes = {
+					F2000020 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					F3000020 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
 			};
 			buildConfigurationList = F1000027 /* Build configuration list for PBXProject "TomOS" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -138,6 +283,8 @@
 			projectRoot = "";
 			targets = (
 				F1000022 /* TomOS */,
+				F2000020 /* TomOSShare */,
+				F3000020 /* TomOSWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -151,6 +298,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F2000032 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3000032 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3000003 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -161,6 +323,11 @@
 				F1000001 /* TomOSApp.swift in Sources */,
 				F1000030 /* AppDelegate.swift in Sources */,
 				F1000042 /* AppIntents.swift in Sources */,
+				F1000044 /* LiveActivityManager.swift in Sources */,
+				F1000046 /* FocusFilter.swift in Sources */,
+				F1000048 /* CalendarManager.swift in Sources */,
+				F1000060 /* M365CalendarManager.swift in Sources */,
+				F1000062 /* HapticManager.swift in Sources */,
 				F1000033 /* NotificationManager.swift in Sources */,
 				F1000035 /* MenuBarController.swift in Sources */,
 				F1000038 /* GlobalShortcutManager.swift in Sources */,
@@ -174,7 +341,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F2000031 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F2000001 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3000031 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3000001 /* TomOSWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F2000012 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F2000020 /* TomOSShare */;
+			targetProxy = F2000011 /* PBXContainerItemProxy */;
+		};
+		F3000012 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F3000020 /* TomOSWidgetExtension */;
+			targetProxy = F3000011 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		F1000028 /* Debug */ = {
@@ -208,7 +404,8 @@
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = TomOS/TomOS.macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
+				INFOPLIST_FILE = TomOS/Info.plist;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
@@ -237,13 +434,14 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "TomOS needs calendar access to show upcoming meetings and create prep tasks.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -297,7 +495,8 @@
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = TomOS/TomOS.macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
+				INFOPLIST_FILE = TomOS/Info.plist;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
@@ -325,13 +524,14 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "TomOS needs calendar access to show upcoming meetings and create prep tasks.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -356,6 +556,132 @@
 			};
 			name = Release;
 		};
+		F2000022 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TomOSShare/TomOSShare.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				INFOPLIST_FILE = TomOS/Info.plist;
+				DEVELOPMENT_TEAM = 89NX9R78Y7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TomOSShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Add to TomOS";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.share;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F2000023 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TomOSShare/TomOSShare.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				INFOPLIST_FILE = TomOS/Info.plist;
+				DEVELOPMENT_TEAM = 89NX9R78Y7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TomOSShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Add to TomOS";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.share;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F3000022 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TomOSWidget/TomOSWidget.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				INFOPLIST_FILE = TomOS/Info.plist;
+				DEVELOPMENT_TEAM = 89NX9R78Y7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TomOSWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TomOSWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F3000023 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TomOSWidget/TomOSWidget.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				INFOPLIST_FILE = TomOS/Info.plist;
+				DEVELOPMENT_TEAM = 89NX9R78Y7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TomOSWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TomOSWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -373,6 +699,24 @@
 			buildConfigurations = (
 				F1000028 /* Debug */,
 				F1000029 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F2000021 /* Build configuration list for PBXNativeTarget "TomOSShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F2000022 /* Debug */,
+				F2000023 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3000021 /* Build configuration list for PBXNativeTarget "TomOSWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3000022 /* Debug */,
+				F3000023 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
