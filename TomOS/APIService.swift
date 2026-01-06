@@ -98,6 +98,49 @@ class APIService {
         _ = try await URLSession.shared.data(from: url)
     }
 
+    // MARK: - Task Actions
+
+    /// Marks a task as completed in Notion
+    /// - Parameter taskId: The Notion page ID of the task
+    func completeTask(taskId: String) async throws {
+        let url = URL(string: "\(baseURL)/api/task/complete")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let body: [String: Any] = ["taskId": taskId]
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.taskActionFailed(action: "complete", statusCode: httpResponse.statusCode)
+        }
+    }
+
+    /// Snoozes a task for a specified duration
+    /// - Parameters:
+    ///   - taskId: The Notion page ID of the task
+    ///   - duration: Snooze duration in minutes (default: 30)
+    func snoozeTask(taskId: String, duration: Int = 30) async throws {
+        let url = URL(string: "\(baseURL)/api/task/snooze")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let body: [String: Any] = [
+            "taskId": taskId,
+            "duration": duration
+        ]
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.taskActionFailed(action: "snooze", statusCode: httpResponse.statusCode)
+        }
+    }
+
     // MARK: - Dashboard
 
     /// Opens the TomOS web dashboard in the default browser.
@@ -172,11 +215,14 @@ class APIService {
 
 enum APIError: LocalizedError {
     case registrationFailed(statusCode: Int)
+    case taskActionFailed(action: String, statusCode: Int)
 
     var errorDescription: String? {
         switch self {
         case .registrationFailed(let statusCode):
             return "Device registration failed with status code: \(statusCode)"
+        case .taskActionFailed(let action, let statusCode):
+            return "Task \(action) failed with status code: \(statusCode)"
         }
     }
 }

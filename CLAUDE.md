@@ -14,7 +14,7 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 **GitHub:** `github.com/braggy9/TomOS-Apps.git` (Private)
 **Related Repo:** [TomOS API](/Users/tombragg/Desktop/Projects/TomOS/) - Vercel backend
 
-## Current Status (Updated 2026-01-03)
+## Current Status (Updated 2026-01-06)
 
 ### Completed
 - ✅ iOS app with push notifications working
@@ -22,7 +22,7 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 - ✅ Menu bar interface (macOS)
 - ✅ APNs device registration for both platforms
 - ✅ Local notification scheduler
-- ✅ Notification action buttons (Complete, Snooze, View)
+- ✅ **Notification action handlers** - Complete, Snooze, View buttons fully functional
 - ✅ macOS app installed in /Applications
 - ✅ Auto-start on login configured
 - ✅ Siri App Intents integration (iOS)
@@ -31,7 +31,12 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 - ✅ Live Activities - Dynamic Island & Lock Screen (iOS 16.2+)
 - ✅ Interactive Widget - Complete/Snooze from widget (iOS 17+)
 - ✅ Focus Filters - Auto-filter tasks by Focus mode (iOS 16+)
-- ✅ Calendar Sync - View events, create prep tasks (iOS 16+)
+- ✅ Calendar Sync - Apple Calendar (EventKit) integration
+- ✅ **M365 Calendar** - Work calendar via Power Automate sync
+- ✅ **TestFlight Distribution** - iOS Build 4 ready for testing
+
+### Not Implemented
+- ⚠️ **watchOS App** - Code exists but not built/deployed (user has no Apple Watch)
 
 ### Registered Devices
 - **iOS:** `f757db2b408a19ec...`
@@ -43,7 +48,7 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 TomOS-Apps/
 ├── TomOS/
 │   ├── TomOSApp.swift              # App entry point
-│   ├── AppDelegate.swift           # APNs registration (iOS & macOS)
+│   ├── AppDelegate.swift           # APNs registration + notification handlers
 │   ├── ContentView.swift           # Main TabView
 │   ├── BrainDumpView.swift         # Batch task entry
 │   ├── SmartSurfaceView.swift      # AI recommendations
@@ -53,11 +58,14 @@ TomOS-Apps/
 │   ├── GlobalShortcutManager.swift # System-wide ⌘⌥ hotkeys
 │   ├── QuickCaptureWindow.swift    # Floating quick capture (⌘⌥T)
 │   ├── NotificationManager.swift   # Local notifications
-│   ├── APIService.swift            # Backend communication
+│   ├── APIService.swift            # Backend communication + task actions
 │   ├── AppIntents.swift            # Siri integration (iOS 16+)
 │   ├── LiveActivityManager.swift   # Dynamic Island/Lock Screen (iOS 16.2+)
 │   ├── FocusFilter.swift           # Focus mode integration (iOS 16+)
-│   ├── CalendarManager.swift       # EventKit calendar sync
+│   ├── CalendarManager.swift       # EventKit calendar sync + UI
+│   ├── M365CalendarManager.swift   # Microsoft 365 OAuth + Graph API
+│   ├── HapticManager.swift         # Haptic feedback (iOS)
+│   ├── Info.plist                  # Privacy declarations (NSCalendarsUsageDescription)
 │   ├── TomOS.entitlements          # iOS entitlements
 │   ├── TomOS.macOS.entitlements    # macOS entitlements
 │   └── Assets.xcassets/            # App icons
@@ -70,6 +78,10 @@ TomOS-Apps/
 │   ├── Info.plist
 │   ├── TomOSWidget.entitlements
 │   └── Assets.xcassets/
+├── TomOSWatch/                     # watchOS App (not deployed)
+│   ├── ContentView.swift           # Watch UI (Quick Add, tasks, actions)
+│   ├── TomOSWatchApp.swift         # Watch app entry point
+│   └── Info.plist
 ├── TomOS.xcodeproj/
 └── .env.local                      # Secrets (gitignored)
 ```
@@ -112,9 +124,13 @@ The `TomOS.macOS.entitlements` file must use the full key for push notifications
 **Endpoints Used:**
 - `POST /api/task` - Create task from natural language
 - `POST /api/task/batch` - Batch import tasks
+- `POST /api/task/complete` - Mark task as completed (notification action)
+- `POST /api/task/snooze` - Snooze task for specified duration (notification action)
 - `POST /api/register-device` - Register APNs device token
-- `GET /api/notifications/morning-overview` - Morning summary
-- `GET /api/notifications/eod-summary` - End of day summary
+- `GET /api/task/smart-surface` - Get AI recommendations for next task
+- `GET /api/notifications/morning-overview` - Trigger morning summary notification
+- `GET /api/notifications/eod-summary` - Trigger end-of-day summary notification
+- `GET /api/m365-calendar` - Fetch work calendar events (Power Automate sync)
 
 ## Build & Run
 
@@ -246,6 +262,65 @@ Home Screen and Lock Screen widgets showing top task:
 **Implementation:** `TomOSWidget/TomOSWidget.swift`
 **Minimum iOS:** 17.0 (for containerBackground API)
 
+## M365 Calendar Integration
+
+TomOS includes dual-path Microsoft 365 calendar integration to handle corporate admin restrictions:
+
+### Power Automate Sync (Default - Works Now)
+- **Backend**: Work calendar synced to TomOS API via Power Automate flow
+- **Endpoint**: `GET /api/m365-calendar` returns events from Notion database
+- **No Auth Required**: Works immediately without OAuth sign-in
+- **UI**: Displays in Calendar tab with "Synced via Power Automate" label
+- **Limitation**: Read-only, depends on Power Automate flow running
+
+### Direct OAuth (Admin Restricted)
+- **Implementation**: Full Microsoft Graph API OAuth2 flow in `M365CalendarManager.swift`
+- **Azure App**: Multi-tenant app registration (Mixtape Running Supply tenant)
+- **Scopes**: `Calendars.Read`, `User.Read`, `offline_access`
+- **Status**: ❌ Cannot use - Requires admin consent for work tenant
+- **Why Built**: Alternative for personal Microsoft accounts or future admin approval
+
+### How It Works
+1. App loads → `M365CalendarManager` attempts Power Automate sync
+2. Fetches events from `/api/m365-calendar` (no auth needed)
+3. Displays work calendar events in Calendar tab
+4. OAuth sign-in option available but won't work for corporate accounts
+
+**File**: `TomOS/M365CalendarManager.swift` (509 lines)
+**UI**: `TomOS/CalendarManager.swift` - `CalendarSyncView` (lines 188-326)
+
+## Notification Action Handlers
+
+Push and local notifications include three action buttons:
+
+### Complete Button (Green)
+- **Action**: Marks task as completed in Notion
+- **API**: `POST /api/task/complete` with `taskId`
+- **Feedback**: iOS haptic success notification
+- **Implementation**: `AppDelegate.swift:handleCompleteTask()`
+
+### Snooze Button (Orange)
+- **Action**: Snoozes task for 30 minutes
+- **API**: `POST /api/task/snooze` with `taskId` and `duration: 30`
+- **Feedback**: iOS haptic success notification
+- **Implementation**: `AppDelegate.swift:handleSnoozeTask()`
+
+### View Button (Blue)
+- **Action**: Opens TomOS web dashboard in browser
+- **Behavior**: Platform-specific URL opening (UIKit/AppKit)
+- **Implementation**: `AppDelegate.swift:handleViewTask()` → `APIService.openDashboard()`
+
+**Note**: Action handlers use async Task APIs to call backend without blocking UI.
+
+## watchOS App (Not Deployed)
+
+A fully-implemented Apple Watch app exists in `TomOSWatch/` but is **not built or deployed** because:
+- User does not own an Apple Watch
+- Code is complete and functional (Quick Add, task display, actions)
+- Can be enabled in future by adding to Xcode scheme and creating watchOS provisioning profile
+
+**Status**: Code exists, not compiled or distributed via TestFlight.
+
 ## User Context
 
 **User:** Tom Bragg
@@ -266,4 +341,4 @@ Home Screen and Lock Screen widgets showing top task:
 
 ---
 
-*Last updated: 2026-01-03*
+*Last updated: 2026-01-06*

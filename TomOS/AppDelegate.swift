@@ -341,17 +341,53 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
     private func handleCompleteTask(taskId: String) {
         print("✅ TomOS: Handling COMPLETE for task: \(taskId)")
-        // TODO: Implement API call
+
+        Task {
+            do {
+                try await APIService.shared.completeTask(taskId: taskId)
+                print("✅ TomOS: Task completed successfully")
+
+                // Show success feedback
+                await MainActor.run {
+                    #if os(iOS)
+                    // iOS haptic feedback
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                    #endif
+                }
+            } catch {
+                print("❌ TomOS: Failed to complete task: \(error)")
+            }
+        }
     }
 
     private func handleSnoozeTask(taskId: String) {
         print("⏰ TomOS: Handling SNOOZE for task: \(taskId)")
-        // TODO: Implement API call
+
+        Task {
+            do {
+                try await APIService.shared.snoozeTask(taskId: taskId, duration: 30)
+                print("⏰ TomOS: Task snoozed for 30 minutes")
+
+                // Show success feedback
+                await MainActor.run {
+                    #if os(iOS)
+                    // iOS haptic feedback
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                    #endif
+                }
+            } catch {
+                print("❌ TomOS: Failed to snooze task: \(error)")
+            }
+        }
     }
 
     private func handleViewTask(taskId: String) {
         print("👁️ TomOS: Handling VIEW for task: \(taskId)")
-        // TODO: Implement navigation
+
+        // Open dashboard in browser to view task details
+        APIService.shared.openDashboard()
     }
 
     // MARK: - Badge Management
@@ -634,17 +670,53 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
 
     private func handleCompleteTask(taskId: String) {
         print("✅ TomOS: Handling COMPLETE for task: \(taskId)")
-        // TODO: Implement API call
+
+        Task {
+            do {
+                try await APIService.shared.completeTask(taskId: taskId)
+                print("✅ TomOS: Task completed successfully")
+
+                // Show success feedback
+                await MainActor.run {
+                    #if os(iOS)
+                    // iOS haptic feedback
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                    #endif
+                }
+            } catch {
+                print("❌ TomOS: Failed to complete task: \(error)")
+            }
+        }
     }
 
     private func handleSnoozeTask(taskId: String) {
         print("⏰ TomOS: Handling SNOOZE for task: \(taskId)")
-        // TODO: Implement API call
+
+        Task {
+            do {
+                try await APIService.shared.snoozeTask(taskId: taskId, duration: 30)
+                print("⏰ TomOS: Task snoozed for 30 minutes")
+
+                // Show success feedback
+                await MainActor.run {
+                    #if os(iOS)
+                    // iOS haptic feedback
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                    #endif
+                }
+            } catch {
+                print("❌ TomOS: Failed to snooze task: \(error)")
+            }
+        }
     }
 
     private func handleViewTask(taskId: String) {
         print("👁️ TomOS: Handling VIEW for task: \(taskId)")
-        // TODO: Implement navigation
+
+        // Open dashboard in browser to view task details
+        APIService.shared.openDashboard()
     }
 
     // MARK: - Badge Management
