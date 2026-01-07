@@ -26,11 +26,13 @@ struct ContentView: View {
                 }
                 .tag(1)
 
+            #if os(iOS)
             TasksView()
                 .tabItem {
                     Label("My Tasks", systemImage: "checklist")
                 }
                 .tag(2)
+            #endif
 
             NavigationStack {
                 CalendarSyncView()

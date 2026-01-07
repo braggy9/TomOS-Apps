@@ -1,6 +1,31 @@
 import SwiftUI
 
-/// Main tasks list view showing all tasks from Notion
+// MARK: - Shared Models (Cross-platform)
+
+enum TaskFilter: String, CaseIterable, Identifiable {
+    case all = "All"
+    case inbox = "Inbox"
+    case todo = "To Do"
+    case inProgress = "In Progress"
+    case done = "Done"
+
+    var id: String { rawValue }
+}
+
+struct TaskItem: Identifiable, Codable {
+    let id: String
+    let title: String
+    let status: String
+    let priority: String?
+    let context: [String]?
+    let dueDate: String?
+}
+
+// MARK: - iOS-Only Views
+
+#if os(iOS)
+
+/// Main tasks list view showing all tasks from Notion (iOS only)
 struct TasksView: View {
     @State private var tasks: [TaskItem] = []
     @State private var isLoading = false
@@ -243,27 +268,7 @@ struct TaskRow: View {
     }
 }
 
-// MARK: - Models
-
-enum TaskFilter: String, CaseIterable, Identifiable {
-    case all = "All"
-    case inbox = "Inbox"
-    case todo = "To Do"
-    case inProgress = "In Progress"
-    case done = "Done"
-
-    var id: String { rawValue }
-}
-
-struct TaskItem: Identifiable, Codable {
-    let id: String
-    let title: String
-    let status: String
-    let priority: String?
-    let context: [String]?
-    let dueDate: String?
-}
-
 #Preview {
     TasksView()
 }
+#endif

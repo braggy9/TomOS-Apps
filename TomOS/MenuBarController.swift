@@ -139,6 +139,10 @@ class MenuBarController: ObservableObject {
         newTaskItem.target = self
         menu?.addItem(newTaskItem)
 
+        let emailTaskItem = NSMenuItem(title: "📧 Email to Task", action: #selector(captureEmailAsTaskAction), keyEquivalent: "")
+        emailTaskItem.target = self
+        menu?.addItem(emailTaskItem)
+
         let brainDumpItem = NSMenuItem(title: "🧠 Brain Dump                   ⌘⌥1", action: #selector(openBrainDump), keyEquivalent: "")
         brainDumpItem.target = self
         menu?.addItem(brainDumpItem)
@@ -383,6 +387,11 @@ class MenuBarController: ObservableObject {
         sendEODSummary()
     }
 
+    @objc private func captureEmailAsTaskAction() {
+        print("📧 MenuBarController: Triggering email capture...")
+        GlobalShortcutManager.shared.triggerEmailCapture()
+    }
+
     // MARK: - Public API for Global Shortcuts
 
     /// Shows the Brain Dump window (called by GlobalShortcutManager)
@@ -471,7 +480,7 @@ class MenuBarController: ObservableObject {
     }
 
     /// Shows a local notification
-    private func showNotification(title: String, body: String) {
+    fileprivate func showNotification(title: String, body: String) {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
@@ -573,7 +582,6 @@ struct MenuBarTask {
 struct QuickEntryView: View {
     @State private var taskText = ""
     @State private var isLoading = false
-    @State private var showSuccess = false
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -609,12 +617,6 @@ struct QuickEntryView: View {
         }
         .padding()
         .frame(minWidth: 350)
-        .alert("Task Created!", isPresented: $showSuccess) {
-            Button("OK") {
-                taskText = ""
-                NSApplication.shared.keyWindow?.close()
-            }
-        }
     }
 
     private func submitTask() {
@@ -626,8 +628,14 @@ struct QuickEntryView: View {
                 _ = try await APIService.shared.batchImport(tasks: taskText)
                 await MainActor.run {
                     isLoading = false
-                    showSuccess = true
+                    // Show auto-dismissing notification instead of alert
+                    MenuBarController.shared.showNotification(title: "Task Created", body: "Your task has been added")
                     MenuBarController.shared.refreshTasks()
+                    // Auto-close window after brief delay
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        taskText = ""
+                        NSApplication.shared.keyWindow?.close()
+                    }
                 }
             } catch {
                 await MainActor.run {
