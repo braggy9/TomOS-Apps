@@ -3,9 +3,8 @@ import SwiftUI
 struct BrainDumpView: View {
     @State private var tasksText = ""
     @State private var isLoading = false
-    @State private var showSuccess = false
-    @State private var taskCount = 0
-    @State private var errorMessage: String?
+    @State private var toast: Toast?
+    @FocusState private var isTextEditorFocused: Bool
 
     var body: some View {
         NavigationStack {
@@ -54,8 +53,18 @@ struct BrainDumpView: View {
                         .padding(4)
                         .background(Color.secondarySystemBackground)
                         .cornerRadius(8)
+                        .focused($isTextEditorFocused)
                 }
                 .padding(.horizontal)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("Done") {
+                            isTextEditorFocused = false
+                        }
+                        .fontWeight(.semibold)
+                    }
+                }
 
                 // Submit Button
                 Button(action: submitTasks) {
@@ -82,34 +91,28 @@ struct BrainDumpView: View {
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
-            .alert("Success!", isPresented: $showSuccess) {
-                Button("OK") {
-                    tasksText = ""
-                }
-            } message: {
-                Text("Created \(taskCount) task\(taskCount == 1 ? "" : "s")! Check your phone 📱")
-            }
-            .alert("Error", isPresented: .constant(errorMessage != nil)) {
-                Button("OK") {
-                    errorMessage = nil
-                }
-            } message: {
-                Text(errorMessage ?? "")
-            }
+            .toast($toast)
         }
     }
 
     func submitTasks() {
         isLoading = true
-        errorMessage = nil
+        isTextEditorFocused = false // Dismiss keyboard
 
         Task {
             do {
                 let response = try await APIService.shared.batchImport(tasks: tasksText)
                 await MainActor.run {
-                    taskCount = response.taskCount
                     isLoading = false
-                    showSuccess = true
+
+                    // Show success toast
+                    let count = response.taskCount
+                    withAnimation {
+                        toast = .success("Created \(count) task\(count == 1 ? "" : "s")!")
+                    }
+
+                    // Clear text field
+                    tasksText = ""
 
                     // Haptic feedback on success
                     #if os(iOS)
@@ -118,8 +121,12 @@ struct BrainDumpView: View {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = "Failed to create tasks: \(error.localizedDescription)"
                     isLoading = false
+
+                    // Show error toast
+                    withAnimation {
+                        toast = .error("Failed to create tasks")
+                    }
 
                     // Error haptic
                     #if os(iOS)

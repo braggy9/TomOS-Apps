@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B57FBF8FD9F24DC5BAF12962 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68549870D85A4B1199DF05DB /* ToastView.swift */; };
+
+		DE91FC335646498485E99AAA /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7BF9973FE44081B49790FA /* TasksView.swift */; };
+
 		F1000001 /* TomOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000002 /* TomOSApp.swift */; };
 		F1000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000004 /* ContentView.swift */; };
 		F1000005 /* BrainDumpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000006 /* BrainDumpView.swift */; };
@@ -66,6 +70,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		68549870D85A4B1199DF05DB /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+
+		1A7BF9973FE44081B49790FA /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
+
 		F1000002 /* TomOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomOSApp.swift; sourceTree = "<group>"; };
 		F1000004 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F1000006 /* BrainDumpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrainDumpView.swift; sourceTree = "<group>"; };
@@ -148,6 +156,8 @@
 				F1000016 /* Assets.xcassets */,
 				F1000032 /* TomOS.entitlements */,
 				F1000037 /* TomOS.macOS.entitlements */,
+				1A7BF9973FE44081B49790FA /* TasksView.swift */,
+				68549870D85A4B1199DF05DB /* ToastView.swift */,
 			);
 			path = TomOS;
 			sourceTree = "<group>";
@@ -338,6 +348,8 @@
 				F1000009 /* QuickActionsView.swift in Sources */,
 				F1000011 /* MoreView.swift in Sources */,
 				F1000013 /* APIService.swift in Sources */,
+				DE91FC335646498485E99AAA /* TasksView.swift in Sources */,
+				B57FBF8FD9F24DC5BAF12962 /* ToastView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
