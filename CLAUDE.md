@@ -14,7 +14,7 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 **GitHub:** `github.com/braggy9/TomOS-Apps.git` (Private)
 **Related Repo:** [TomOS API](/Users/tombragg/Desktop/Projects/TomOS/) - Vercel backend
 
-## Current Status (Updated 2026-01-06)
+## Current Status (Updated 2026-01-07)
 
 ### Completed
 - ✅ iOS app with push notifications working
@@ -33,7 +33,10 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 - ✅ Focus Filters - Auto-filter tasks by Focus mode (iOS 16+)
 - ✅ Calendar Sync - Apple Calendar (EventKit) integration
 - ✅ **M365 Calendar** - Work calendar via Power Automate sync
-- ✅ **TestFlight Distribution** - iOS Build 4 ready for testing
+- ✅ **TestFlight Distribution** - iOS Build 5 live
+- ✅ **My Tasks Tab** - Full task list view with filters
+- ✅ **Toast Notifications** - Auto-dismissing success/error messages
+- ✅ **Keyboard Dismiss** - Done button in Brain Dump
 
 ### Not Implemented
 - ⚠️ **watchOS App** - Code exists but not built/deployed (user has no Apple Watch)
@@ -50,10 +53,12 @@ TomOS-Apps/
 │   ├── TomOSApp.swift              # App entry point
 │   ├── AppDelegate.swift           # APNs registration + notification handlers
 │   ├── ContentView.swift           # Main TabView
-│   ├── BrainDumpView.swift         # Batch task entry
+│   ├── BrainDumpView.swift         # Batch task entry with toast notifications
 │   ├── SmartSurfaceView.swift      # AI recommendations
-│   ├── QuickActionsView.swift      # Notification triggers
-│   ├── MoreView.swift              # About/Info view
+│   ├── TasksView.swift             # Full task list with filters (NEW)
+│   ├── ToastView.swift             # Auto-dismissing notifications (NEW)
+│   ├── QuickActionsView.swift      # Notification triggers (legacy)
+│   ├── MoreView.swift              # About/Info + Quick Actions
 │   ├── MenuBarController.swift     # macOS menu bar + window management
 │   ├── GlobalShortcutManager.swift # System-wide ⌘⌥ hotkeys
 │   ├── QuickCaptureWindow.swift    # Floating quick capture (⌘⌥T)

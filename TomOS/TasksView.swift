@@ -168,7 +168,7 @@ struct TaskRow: View {
                     .font(.title2)
                     .foregroundStyle(task.status == "Done" ? .green : .gray)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.borderless)
 
             VStack(alignment: .leading, spacing: 6) {
                 // Title

@@ -500,7 +500,11 @@ class MenuBarController: ObservableObject {
         window: inout NSWindow?
     ) {
         // Close existing window if different content
-        window?.close()
+        // Stop any animations before closing to prevent use-after-free crashes
+        if let existingWindow = window {
+            existingWindow.animator().alphaValue = existingWindow.alphaValue // Cancel animations
+            existingWindow.close()
+        }
 
         // Create hosting controller for SwiftUI view
         let hostingController = NSHostingController(rootView: content)
