@@ -26,9 +26,9 @@ struct ContentView: View {
                 }
                 .tag(1)
 
-            QuickActionsView()
+            TasksView()
                 .tabItem {
-                    Label("Quick Actions", systemImage: "bolt.circle")
+                    Label("My Tasks", systemImage: "checklist")
                 }
                 .tag(2)
 

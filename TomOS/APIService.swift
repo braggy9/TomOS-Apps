@@ -209,6 +209,30 @@ class APIService {
             }
         }
     }
+
+    // MARK: - Tasks List
+
+    /// Fetches all tasks from Notion database
+    func getTasks() async throws -> [TaskItem] {
+        let url = URL(string: "\(baseURL)/api/all-tasks")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.networkError(statusCode: httpResponse.statusCode)
+        }
+
+        struct TasksResponse: Codable {
+            let success: Bool
+            let count: Int
+            let tasks: [TaskItem]
+        }
+
+        let tasksResponse = try JSONDecoder().decode(TasksResponse.self, from: data)
+        return tasksResponse.tasks
+    }
 }
 
 // MARK: - API Errors
@@ -216,6 +240,7 @@ class APIService {
 enum APIError: LocalizedError {
     case registrationFailed(statusCode: Int)
     case taskActionFailed(action: String, statusCode: Int)
+    case networkError(statusCode: Int)
 
     var errorDescription: String? {
         switch self {
@@ -223,6 +248,8 @@ enum APIError: LocalizedError {
             return "Device registration failed with status code: \(statusCode)"
         case .taskActionFailed(let action, let statusCode):
             return "Task \(action) failed with status code: \(statusCode)"
+        case .networkError(let statusCode):
+            return "Network request failed with status code: \(statusCode)"
         }
     }
 }

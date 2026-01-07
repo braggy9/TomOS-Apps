@@ -99,6 +99,10 @@ class MoreViewModel: ObservableObject {
 
 struct MoreView: View {
     @StateObject private var viewModel = MoreViewModel()
+    @State private var isLoadingMorning = false
+    @State private var isLoadingEOD = false
+    @State private var showSuccess = false
+    @State private var successMessage = ""
 
     var body: some View {
         NavigationStack {
@@ -151,6 +155,82 @@ struct MoreView: View {
                         title: "EOD Summary",
                         description: "Reflect and plan for tomorrow"
                     )
+                }
+
+                Section("Quick Actions") {
+                    Button(action: sendMorningOverview) {
+                        HStack {
+                            Image(systemName: "sunrise.fill")
+                                .foregroundColor(.orange)
+                                .frame(width: 30)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Send Morning Overview")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+
+                                Text("Daily task overview and AI-powered advice")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+
+                            Spacer()
+
+                            if isLoadingMorning {
+                                ProgressView()
+                            }
+                        }
+                    }
+                    .disabled(isLoadingMorning)
+
+                    Button(action: sendEODSummary) {
+                        HStack {
+                            Image(systemName: "moon.fill")
+                                .foregroundColor(.purple)
+                                .frame(width: 30)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Send EOD Summary")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+
+                                Text("Reflect on today and preview tomorrow")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+
+                            Spacer()
+
+                            if isLoadingEOD {
+                                ProgressView()
+                            }
+                        }
+                    }
+                    .disabled(isLoadingEOD)
+
+                    Button(action: { APIService.shared.openDashboard() }) {
+                        HStack {
+                            Image(systemName: "safari")
+                                .foregroundColor(.blue)
+                                .frame(width: 30)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Open Dashboard")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+
+                                Text("View all tasks in web interface")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+
+                            Spacer()
+
+                            Image(systemName: "arrow.up.right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
                 }
 
                 Section("AI Powered By") {
@@ -222,8 +302,13 @@ struct MoreView: View {
                     HStack {
                         Text("Build")
                         Spacer()
+                        #if os(macOS)
+                        Text("macOS")
+                            .foregroundColor(.secondary)
+                        #else
                         Text("iOS/iPadOS")
                             .foregroundColor(.secondary)
+                        #endif
                     }
                 }
 
@@ -235,6 +320,55 @@ struct MoreView: View {
                 }
             }
             .navigationTitle("About")
+            .alert("Success!", isPresented: $showSuccess) {
+                Button("OK") { }
+            } message: {
+                Text(successMessage)
+            }
+        }
+    }
+
+    // MARK: - Quick Actions
+
+    func sendMorningOverview() {
+        isLoadingMorning = true
+
+        Task {
+            do {
+                try await APIService.shared.sendMorningOverview()
+                await MainActor.run {
+                    isLoadingMorning = false
+                    successMessage = "Morning overview sent! Check your phone 📱"
+                    showSuccess = true
+                }
+            } catch {
+                await MainActor.run {
+                    isLoadingMorning = false
+                    successMessage = "Failed to send morning overview"
+                    showSuccess = true
+                }
+            }
+        }
+    }
+
+    func sendEODSummary() {
+        isLoadingEOD = true
+
+        Task {
+            do {
+                try await APIService.shared.sendEODSummary()
+                await MainActor.run {
+                    isLoadingEOD = false
+                    successMessage = "EOD summary sent! Check your phone 📱"
+                    showSuccess = true
+                }
+            } catch {
+                await MainActor.run {
+                    isLoadingEOD = false
+                    successMessage = "Failed to send EOD summary"
+                    showSuccess = true
+                }
+            }
         }
     }
 }
