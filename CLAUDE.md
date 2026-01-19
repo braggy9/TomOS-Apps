@@ -17,9 +17,10 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 ## Current Status (Updated 2026-01-19)
 
 ### Latest Release
-- **iOS:** Version 1.1 (Build 13) - TestFlight
+- **iOS:** Version 1.2 (Build 14) - In Development
 - **macOS:** Version 1.1 (Build 13) - Installed /Applications
-- **What's New in 1.1:** Tag system, task editing, swipe-to-complete, auto-refresh
+- **What's New in 1.2:** MatterOS integration - Legal practice management
+- **Previous Release (1.1):** Tag system, task editing, swipe-to-complete, auto-refresh
 
 ### Completed Features
 - ✅ iOS app with push notifications working
@@ -47,6 +48,11 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 - ✅ **Task Editing** - Full edit form with all properties (Build 8+)
 - ✅ **Task Completion** - Swipe actions for completing tasks (Build 13)
 - ✅ **Auto-Refresh** - Brain Dump tasks appear immediately in Tasks View (Build 11-13)
+- ✅ **MatterOS Integration** - Legal practice management (Build 14+)
+  - Matters tab with filtering (All, Active, Completed, Urgent, High Priority)
+  - Matter detail view with Overview, Documents, Timeline, Notes tabs
+  - Create new matters with client, type, priority, lead counsel
+  - Full CRUD operations via TomOS API backend
 
 ### Recent Bug Fixes (Build 13 - 2026-01-16)
 - ✅ **Fixed:** Task completion now uses iOS-native swipe actions (swipe right to complete)
@@ -64,7 +70,29 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 
 ## Recent Build History
 
-### Build 13 (2026-01-16) - CURRENT
+### Build 14 (2026-01-19) - CURRENT (In Development)
+**Changes:**
+- Added MatterOS integration for legal practice management
+- New Matters tab between Smart Surface and My Tasks
+- Created Matter.swift data models (Matter, MatterDocument, MatterEvent, MatterNote)
+- Added 7 MatterOS API methods to APIService (getMatters, getMatter, createMatter, updateMatter, getMatterDocuments, getMatterEvents, getMatterNotes)
+- Built MattersView with filtering (All, Active, Completed, On Hold, Urgent, High Priority)
+- Built MatterDetailView with tabbed sections (Overview, Documents, Timeline, Notes)
+- Built CreateMatterView form with validation
+- Added .openMatters notification for navigation
+- Tab order updated: Brain Dump (0), Smart Surface (1), Matters (2), Tasks (3), Calendar (4), More (5)
+
+**Files Added:**
+- `TomOS/Matter.swift` - Data models
+- `TomOS/MattersView.swift` - List view
+- `TomOS/MatterDetailView.swift` - Detail view
+- `TomOS/CreateMatterView.swift` - Creation form
+
+**Files Modified:**
+- `ContentView.swift` - Added Matters tab, updated tag numbers
+- `APIService.swift` - Added MatterOS methods
+
+### Build 13 (2026-01-16) - Previous Release
 **Changes:**
 - Implemented iOS-native swipe actions for task completion
 - Swipe right on task row to reveal Complete button
@@ -144,13 +172,20 @@ TomOS-Apps/
 ├── TomOS/
 │   ├── TomOSApp.swift              # App entry point
 │   ├── AppDelegate.swift           # APNs registration + notification handlers
-│   ├── ContentView.swift           # Main TabView
+│   ├── ContentView.swift           # Main TabView (5 tabs: Brain Dump, Smart Surface, Matters, Tasks, Calendar, More)
 │   ├── BrainDumpView.swift         # Batch task entry with toast notifications
 │   ├── SmartSurfaceView.swift      # AI recommendations
-│   ├── TasksView.swift             # Full task list with filters (NEW)
-│   ├── ToastView.swift             # Auto-dismissing notifications (NEW)
+│   ├── TasksView.swift             # Full task list with filters
+│   ├── TaskDetailView.swift        # Edit task details
+│   ├── ToastView.swift             # Auto-dismissing notifications
 │   ├── QuickActionsView.swift      # Notification triggers (legacy)
 │   ├── MoreView.swift              # About/Info + Quick Actions
+│   ├── Models/
+│   │   └── Matter.swift            # MatterOS data models (Matter, MatterDocument, MatterEvent, MatterNote)
+│   ├── MattersView.swift           # MatterOS list view with filtering (NEW Build 14)
+│   ├── MatterDetailView.swift      # MatterOS detail with tabs (NEW Build 14)
+│   ├── CreateMatterView.swift      # MatterOS creation form (NEW Build 14)
+│   ├── TagPicker.swift             # Tag selection UI
 │   ├── MenuBarController.swift     # macOS menu bar + window management
 │   ├── GlobalShortcutManager.swift # System-wide ⌘⌥ hotkeys
 │   ├── QuickCaptureWindow.swift    # Floating quick capture (⌘⌥T)
@@ -218,7 +253,7 @@ The `TomOS.macOS.entitlements` file must use the full key for push notifications
 
 **API Base URL:** `https://tomos-task-api.vercel.app`
 
-**Endpoints Used:**
+**Task Endpoints:**
 - `POST /api/task` - Create task from natural language
 - `POST /api/task/batch` - Batch import tasks
 - `POST /api/task/complete` - Mark task as completed (notification action)
@@ -228,6 +263,16 @@ The `TomOS.macOS.entitlements` file must use the full key for push notifications
 - `GET /api/notifications/morning-overview` - Trigger morning summary notification
 - `GET /api/notifications/eod-summary` - Trigger end-of-day summary notification
 - `GET /api/m365-calendar` - Fetch work calendar events (Power Automate sync)
+
+**MatterOS Endpoints:** (Added Build 14)
+- `GET /api/matters` - List matters with filtering (status, priority, limit)
+- `POST /api/matters` - Create new matter
+- `GET /api/matters/[id]` - Get single matter details
+- `PATCH /api/matters/[id]` - Update matter
+- `DELETE /api/matters/[id]` - Archive matter
+- `GET /api/matters/[id]/documents` - List documents for matter
+- `GET /api/matters/[id]/events` - List timeline events for matter
+- `GET /api/matters/[id]/notes` - List notes for matter
 
 ## Build & Run
 
