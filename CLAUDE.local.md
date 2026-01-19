@@ -50,18 +50,60 @@ rm -rf /Applications/TomOS.app && cp -R "$APP_PATH" /Applications/TomOS.app
 
 ## Context for Next Session
 
-- System fully operational with all 6 phases complete
-- Global keyboard shortcuts working:
-  - ⌘⌥T - Quick Task Capture (floating window)
-  - ⌘⌥1 - Brain Dump
-  - ⌘⌥2 - What Should I Work On?
-  - ⌘⌥3 - Send Morning Overview
-  - ⌘⌥4 - Send EOD Summary
-  - ⌘⌥5 - Open Dashboard
-  - ⌘⌥M - Show Menu Bar Dropdown
-  - ⌘⌥Q - Quit TomOS
-- Requires Accessibility permissions for global shortcuts
-- Consider: Widget support, Phase 7 feature consolidation
+### Build 14 - MatterOS Integration Complete (2026-01-19)
+
+**✅ Completed Tonight:**
+1. **MatterOS iOS Integration**
+   - Created Matter.swift data models (Matter, MatterDocument, MatterEvent, MatterNote)
+   - Built MattersView with filtering (All, Active, Completed, On Hold, Urgent, High)
+   - Built MatterDetailView with tabbed sections (Overview, Documents, Timeline, Notes)
+   - Built CreateMatterView form with validation
+   - Added Matters tab to iOS app (between Smart Surface and My Tasks)
+   - All 7 MatterOS API methods integrated
+
+2. **Email-to-Task Fix (macOS) - CRITICAL FIX**
+   - **Root Cause:** Missing AppleEvents entitlement for Outlook access
+   - **Fixed:** Added `com.apple.security.temporary-exception.apple-events` to macOS entitlements
+   - **Fixed:** Added NSAppleEventsUsageDescription to Info.plist
+   - **Status:** ⌘⌥E email-to-task now has proper permissions
+   - **Action Required:** User must grant permission when first using ⌘⌥E
+
+3. **Cross-Platform Compatibility**
+   - Made all MatterOS views work on both iOS and macOS
+   - Wrapped iOS-only modifiers (.textInputAutocapitalization, .navigationBarTitleDisplayMode)
+   - Fixed toolbar placements for macOS (navigation/automatic vs topBarLeading/topBarTrailing)
+   - Both iOS and macOS builds succeed
+
+4. **Documentation Updates**
+   - Updated CLAUDE.md with Build 14 details
+   - Documented MatterOS integration
+   - Added MatterOS API endpoints section
+   - Three commits pushed to GitHub
+
+**Updated macOS app** in /Applications with email-to-task fix
+
+### Global Keyboard Shortcuts
+- ⌘⌥T - Quick Task Capture (floating window)
+- ⌘⌥E - Email to Task (Outlook) - **NOW FIXED**
+- ⌘⌥1 - Brain Dump
+- ⌘⌥2 - What Should I Work On?
+- ⌘⌥3 - Send Morning Overview
+- ⌘⌥4 - Send EOD Summary
+- ⌘⌥5 - Open Dashboard
+- ⌘⌥M - Show Menu Bar Dropdown
+- ⌘⌥Q - Quit TomOS
+
+**Requires Permissions:**
+- Accessibility (for global shortcuts)
+- Automation (for Outlook/AppleEvents) - **NEW**
+
+### Next Steps (User's Priority List)
+- [ ] Test email-to-task functionality (⌘⌥E) - verify permission prompt works
+- [ ] Consider linking email-to-task to MatterOS (e.g., attach email to matter)
+- [ ] Review and enhance iOS/macOS app functionality
+- [ ] Consider easy ways to add tasks in iOS
+- [ ] Build web dashboard (lower priority)
+- [ ] Deploy Build 14 to TestFlight
 
 ---
 
