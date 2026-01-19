@@ -35,10 +35,14 @@ struct CreateMatterView: View {
             Form {
                 Section("Basic Information") {
                     TextField("Title", text: $title)
+                        #if os(iOS)
                         .textInputAutocapitalization(.words)
+                        #endif
 
                     TextField("Client", text: $client)
+                        #if os(iOS)
                         .textInputAutocapitalization(.words)
+                        #endif
 
                     Picker("Type", selection: $selectedType) {
                         ForEach(MatterType.allCases) { type in
@@ -64,16 +68,24 @@ struct CreateMatterView: View {
 
                 Section("Details") {
                     TextField("Matter Number (Optional)", text: $matterNumber)
+                        #if os(iOS)
                         .textInputAutocapitalization(.characters)
+                        #endif
 
                     TextField("Lead Counsel (Optional)", text: $leadCounsel)
+                        #if os(iOS)
                         .textInputAutocapitalization(.words)
+                        #endif
 
                     TextField("Practice Area (Optional)", text: $practiceArea)
+                        #if os(iOS)
                         .textInputAutocapitalization(.words)
+                        #endif
 
                     TextField("Jurisdiction (Optional)", text: $jurisdiction)
+                        #if os(iOS)
                         .textInputAutocapitalization(.words)
+                        #endif
                 }
 
                 Section("Description") {
@@ -90,7 +102,9 @@ struct CreateMatterView: View {
                 }
             }
             .navigationTitle("New Matter")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {

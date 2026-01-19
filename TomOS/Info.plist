@@ -15,5 +15,7 @@
 	</array>
 	<key>NSCalendarsUsageDescription</key>
 	<string>TomOS needs access to your calendar to view upcoming meetings and help you create preparation tasks for scheduled events.</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>TomOS needs to access Microsoft Outlook to convert selected emails into tasks using the ⌘⌥E shortcut.</string>
 </dict>
 </plist>

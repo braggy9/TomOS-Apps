@@ -97,6 +97,7 @@ struct MattersView: View {
             }
             .navigationTitle("Matters")
             .toolbar {
+                #if os(iOS)
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
                         Picker("Filter", selection: $selectedFilter) {
@@ -117,6 +118,28 @@ struct MattersView: View {
                         Image(systemName: "plus.circle.fill")
                     }
                 }
+                #else
+                ToolbarItem(placement: .navigation) {
+                    Menu {
+                        Picker("Filter", selection: $selectedFilter) {
+                            ForEach(MatterFilter.allCases) { filter in
+                                Label(filter.rawValue, systemImage: filter.icon)
+                                    .tag(filter)
+                            }
+                        }
+                    } label: {
+                        Label(selectedFilter.rawValue, systemImage: selectedFilter.icon)
+                    }
+                }
+
+                ToolbarItem(placement: .automatic) {
+                    Button {
+                        showingCreateSheet = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                    }
+                }
+                #endif
             }
         }
         .toast($toast)

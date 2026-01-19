@@ -122,7 +122,9 @@ struct MatterDetailView: View {
                     .padding(.vertical)
                 }
                 .navigationTitle("Matter")
+                #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
+                #endif
                 .refreshable {
                     await refreshMatter()
                 }
