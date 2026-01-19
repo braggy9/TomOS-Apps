@@ -14,9 +14,14 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 **GitHub:** `github.com/braggy9/TomOS-Apps.git` (Private)
 **Related Repo:** [TomOS API](/Users/tombragg/Desktop/Projects/TomOS/) - Vercel backend
 
-## Current Status (Updated 2026-01-07)
+## Current Status (Updated 2026-01-19)
 
-### Completed
+### Latest Release
+- **iOS:** Version 1.1 (Build 13) - TestFlight
+- **macOS:** Version 1.1 (Build 13) - Installed /Applications
+- **What's New in 1.1:** Tag system, task editing, swipe-to-complete, auto-refresh
+
+### Completed Features
 - ✅ iOS app with push notifications working
 - ✅ macOS app with push notifications working
 - ✅ Menu bar interface (macOS)
@@ -33,10 +38,22 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 - ✅ Focus Filters - Auto-filter tasks by Focus mode (iOS 16+)
 - ✅ Calendar Sync - Apple Calendar (EventKit) integration
 - ✅ **M365 Calendar** - Work calendar via Power Automate sync
-- ✅ **TestFlight Distribution** - iOS Build 5 live
-- ✅ **My Tasks Tab** - Full task list view with filters
+- ✅ **TestFlight Distribution** - iOS Build 11 live
+- ✅ **My Tasks Tab** - Full task list view with filters (iOS only)
 - ✅ **Toast Notifications** - Auto-dismissing success/error messages
 - ✅ **Keyboard Dismiss** - Done button in Brain Dump
+- ✅ **Tag System** - TagPicker UI with 26 predefined tags (Build 9+)
+- ✅ **Tag Shortcuts** - p:/pro:, a:, t: shortcuts for inline tagging (Build 9+)
+- ✅ **Task Editing** - Full edit form with all properties (Build 8+)
+- ✅ **Task Completion** - Swipe actions for completing tasks (Build 13)
+- ✅ **Auto-Refresh** - Brain Dump tasks appear immediately in Tasks View (Build 11-13)
+
+### Recent Bug Fixes (Build 13 - 2026-01-16)
+- ✅ **Fixed:** Task completion now uses iOS-native swipe actions (swipe right to complete)
+- ✅ **Fixed:** NotificationCenter observer leak with .onReceive modifier (Build 12)
+- ✅ **Fixed:** Brain Dump tasks not appearing in Tasks View (Build 11)
+- ✅ **Fixed:** Batch import with tags (Build 10)
+- ✅ **Fixed:** API response parsing (Build 10)
 
 ### Not Implemented
 - ⚠️ **watchOS App** - Code exists but not built/deployed (user has no Apple Watch)
@@ -44,6 +61,81 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 ### Registered Devices
 - **iOS:** `f757db2b408a19ec...`
 - **macOS:** `025aeb1d4d823d33...`
+
+## Recent Build History
+
+### Build 13 (2026-01-16) - CURRENT
+**Changes:**
+- Implemented iOS-native swipe actions for task completion
+- Swipe right on task row to reveal Complete button
+- Full swipe completes task instantly
+- Fixed gesture conflicts between NavigationLink and completion button
+- macOS app updated to match iOS build number
+
+**Files Modified:**
+- `TasksView.swift` - Replaced button-in-row with swipeActions(edge: .leading)
+- `TasksView.swift` - Status indicator now visual-only (no tap action)
+
+### Build 12 (2026-01-16) - TestFlight Only
+**Changes:**
+- Fixed NotificationCenter observer leak using .onReceive modifier
+- Attempted button-outside-NavigationLink fix (didn't work due to List row behavior)
+- Improved memory management for view lifecycle
+
+**Files Modified:**
+- `TasksView.swift` - Replaced manual NotificationCenter observer with .onReceive
+- `TasksView.swift` - Restructured row layout (superseded by Build 13)
+
+### Build 11 (2026-01-13)
+**Changes:**
+- Added NotificationCenter communication between Brain Dump and Tasks View
+- Tasks now auto-refresh in Tasks View immediately after Brain Dump creation
+- No manual pull-to-refresh needed
+- macOS app updated to match iOS build
+
+**Files Modified:**
+- `BrainDumpView.swift` - Added `NotificationCenter.default.post(name: .tasksCreated)`
+- `TasksView.swift` - Added `NotificationCenter` listener for auto-refresh
+- `TasksView.swift` - Added `extension Notification.Name` for `.tasksCreated`
+
+### Build 10 (2026-01-10) - TestFlight Only
+**Changes:**
+- Fixed batch import to include selected tags
+- Updated TaskResponse model to match backend format (notionPageId, parsedTask)
+- Better error logging for debugging
+- Tag shortcuts already working via backend (no app change needed)
+
+**Files Modified:**
+- `APIService.swift` - Updated `batchImport()` to accept tags parameter
+- `APIService.swift` - Fixed TaskResponse model structure
+- `BrainDumpView.swift` - Enhanced error messages
+
+### Build 9 (2026-01-09)
+**Changes:**
+- Integrated TagPicker UI into BrainDumpView
+- Added 26 predefined tags (6 projects, 6 areas, 8 actions, 6 topics)
+- Tag selection UI with category filters
+- Backend tag shortcuts (p:, pro:, a:, t:) working
+
+**Files Added:**
+- `TagPicker.swift` - Complete tag picker UI with search and filters
+
+**Files Modified:**
+- `BrainDumpView.swift` - Added tag selection sheet
+- `APIService.swift` - Updated createTask to send tags
+
+### Build 8 (2026-01-08)
+**Changes:**
+- Added full task editing functionality
+- Tasks View now navigable - tap to edit
+- Fixed button responsiveness with `.buttonStyle(.plain)`
+
+**Files Added:**
+- `TaskDetailView.swift` - Complete task edit form
+
+**Files Modified:**
+- `TasksView.swift` - Added NavigationLink and button style fixes
+- `APIService.swift` - Added updateTask method
 
 ## Project Structure
 
@@ -337,6 +429,36 @@ A fully-implemented Apple Watch app exists in `TomOSWatch/` but is **not built o
 - Reliable notifications that don't break focus
 - Quick context switching between work modes
 
+## Documentation
+
+### Architecture & Design Documentation (NEW - 2026-01-08)
+
+- **[ARCHITECTURE_AUDIT.md](./ARCHITECTURE_AUDIT.md)** - Comprehensive architecture analysis
+  - Overall grade: A- (excellent with optimization opportunities)
+  - Current state: 6,759 lines, 21 files
+  - Optimization recommendations: Caching, state management, offline support
+  - Performance targets and API call reduction strategies
+
+- **[OFFLINE_MODE_DESIGN.md](./OFFLINE_MODE_DESIGN.md)** - Complete offline mode architecture
+  - CoreData schema design
+  - TaskStore state management
+  - SyncEngine bidirectional sync
+  - Conflict resolution strategy
+  - 4-week implementation roadmap
+
+- **[TAG_INTEGRATION_GUIDE.md](./TAG_INTEGRATION_GUIDE.md)** - Tag system integration
+  - How to add TagPicker.swift to Xcode
+  - Update APIService for tag support
+  - Integrate into BrainDumpView and QuickCapture
+  - API usage examples
+
+### Backend Documentation
+
+- **[TAG_GUIDELINES.md](../tomos-dashboard/TAG_GUIDELINES.md)** - Tagging philosophy
+  - Prefix-based system: `proj:`, `area:`, `act:`, `topic:`
+  - 25+ predefined tags with descriptions
+  - Usage examples and best practices
+
 ## Quick Reference
 
 **Need backend changes?** Switch to `/Users/tombragg/Desktop/Projects/TomOS/`
@@ -344,6 +466,21 @@ A fully-implemented Apple Watch app exists in `TomOSWatch/` but is **not built o
 **APNs not working?** Check entitlements key, provisioning profile, physical device
 **Xcode issues?** Clean Build Folder (⇧⌘K) then rebuild
 
+## Roadmap
+
+### Completed (2026-01-08)
+- ✅ Phase 1: Tag system (guidelines, API, Swift picker)
+- ✅ Phase 2: Architecture audit
+- ✅ Phase 4: Tag migration script
+- ✅ Phase 3: Offline mode design
+
+### Next Steps
+- [ ] Phase 3 Implementation: Offline mode with CoreData (4 weeks)
+  - Week 1: CoreData foundation
+  - Week 2: TaskStore migration + Read-only sync
+  - Week 3: Offline create/update + Conflict resolution
+  - Week 4: Polish & production deployment
+
 ---
 
-*Last updated: 2026-01-06*
+*Last updated: 2026-01-08*

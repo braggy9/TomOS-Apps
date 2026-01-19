@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B7736F907D54E3C28391EBF /* MattersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418FCA36C5644AF9FE23F9B7 /* MattersView.swift */; };
+		8B479ACD7E3C709F8EAB1FB2 /* Matter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E80F2E3BA6DB1EB5C0449B /* Matter.swift */; };
+		8E231FB66A64F16DA30CD7AC /* CreateMatterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70092D500E26CA313A23B49 /* CreateMatterView.swift */; };
 		B57FBF8FD9F24DC5BAF12962 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68549870D85A4B1199DF05DB /* ToastView.swift */; };
-
+		B82EFEDFF1C08C4D9D9BADE9 /* MatterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0065D888A9185F99E68C1DD /* MatterDetailView.swift */; };
 		DE91FC335646498485E99AAA /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7BF9973FE44081B49790FA /* TasksView.swift */; };
-
 		F1000001 /* TomOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000002 /* TomOSApp.swift */; };
 		F1000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000004 /* ContentView.swift */; };
 		F1000005 /* BrainDumpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000006 /* BrainDumpView.swift */; };
@@ -30,6 +32,8 @@
 		F1000048 /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000049 /* CalendarManager.swift */; };
 		F1000060 /* M365CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000061 /* M365CalendarManager.swift */; };
 		F1000062 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000063 /* HapticManager.swift */; };
+		F162EC23 /* TagPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FF2254 /* TagPicker.swift */; };
+		F1E14CC5 /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AC3F07 /* TaskDetailView.swift */; };
 		F2000001 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2000002 /* ShareViewController.swift */; };
 		F2000010 /* TomOSShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F2000003 /* TomOSShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F3000001 /* TomOSWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3000002 /* TomOSWidget.swift */; };
@@ -70,10 +74,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		68549870D85A4B1199DF05DB /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
-
 		1A7BF9973FE44081B49790FA /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
-
+		31E80F2E3BA6DB1EB5C0449B /* Matter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Matter.swift; path = Matter.swift; sourceTree = "<group>"; };
+		418FCA36C5644AF9FE23F9B7 /* MattersView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MattersView.swift; sourceTree = "<group>"; };
+		68549870D85A4B1199DF05DB /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		C0065D888A9185F99E68C1DD /* MatterDetailView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MatterDetailView.swift; sourceTree = "<group>"; };
+		D70092D500E26CA313A23B49 /* CreateMatterView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreateMatterView.swift; sourceTree = "<group>"; };
 		F1000002 /* TomOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomOSApp.swift; sourceTree = "<group>"; };
 		F1000004 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F1000006 /* BrainDumpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrainDumpView.swift; sourceTree = "<group>"; };
@@ -96,14 +102,16 @@
 		F1000049 /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
 		F1000061 /* M365CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M365CalendarManager.swift; sourceTree = "<group>"; };
 		F1000063 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		F1AC3F07 /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
+		F1FF2254 /* TagPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPicker.swift; sourceTree = "<group>"; };
 		F2000002 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		F2000003 /* TomOSShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TomOSShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F2000006 /* TomOSShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TomOSShare.entitlements; sourceTree = "<group>"; };
 		F3000002 /* TomOSWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomOSWidget.swift; sourceTree = "<group>"; };
 		F3000004 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F3000005 /* TomOSWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TomOSWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3000006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F2000006 /* TomOSShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TomOSShare.entitlements; sourceTree = "<group>"; };
 		F3000008 /* TomOSWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TomOSWidget.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,6 +140,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D172E77E4E9E2F5D459BA283 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				31E80F2E3BA6DB1EB5C0449B /* Matter.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		F1000019 /* TomOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -149,6 +165,8 @@
 				F1000041 /* QuickCaptureWindow.swift */,
 				F1000004 /* ContentView.swift */,
 				F1000006 /* BrainDumpView.swift */,
+				F1AC3F07 /* TaskDetailView.swift */,
+				F1FF2254 /* TagPicker.swift */,
 				F1000008 /* SmartSurfaceView.swift */,
 				F1000010 /* QuickActionsView.swift */,
 				F1000012 /* MoreView.swift */,
@@ -158,6 +176,10 @@
 				F1000037 /* TomOS.macOS.entitlements */,
 				1A7BF9973FE44081B49790FA /* TasksView.swift */,
 				68549870D85A4B1199DF05DB /* ToastView.swift */,
+				D172E77E4E9E2F5D459BA283 /* Models */,
+				418FCA36C5644AF9FE23F9B7 /* MattersView.swift */,
+				C0065D888A9185F99E68C1DD /* MatterDetailView.swift */,
+				D70092D500E26CA313A23B49 /* CreateMatterView.swift */,
 			);
 			path = TomOS;
 			sourceTree = "<group>";
@@ -344,12 +366,18 @@
 				F1000040 /* QuickCaptureWindow.swift in Sources */,
 				F1000003 /* ContentView.swift in Sources */,
 				F1000005 /* BrainDumpView.swift in Sources */,
+				F1E14CC5 /* TaskDetailView.swift in Sources */,
+				F162EC23 /* TagPicker.swift in Sources */,
 				F1000007 /* SmartSurfaceView.swift in Sources */,
 				F1000009 /* QuickActionsView.swift in Sources */,
 				F1000011 /* MoreView.swift in Sources */,
 				F1000013 /* APIService.swift in Sources */,
 				DE91FC335646498485E99AAA /* TasksView.swift in Sources */,
 				B57FBF8FD9F24DC5BAF12962 /* ToastView.swift in Sources */,
+				8B479ACD7E3C709F8EAB1FB2 /* Matter.swift in Sources */,
+				1B7736F907D54E3C28391EBF /* MattersView.swift in Sources */,
+				B82EFEDFF1C08C4D9D9BADE9 /* MatterDetailView.swift in Sources */,
+				8E231FB66A64F16DA30CD7AC /* CreateMatterView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,8 +444,7 @@
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = TomOS/TomOS.macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
-				INFOPLIST_FILE = TomOS/Info.plist;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
@@ -446,21 +473,22 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TomOS/Info.plist;
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "TomOS needs calendar access to show upcoming meetings and create prep tasks.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app;
 				PRODUCT_NAME = TomOS;
@@ -507,8 +535,7 @@
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = TomOS/TomOS.macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
-				INFOPLIST_FILE = TomOS/Info.plist;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
@@ -536,21 +563,22 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TomOS/Info.plist;
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "TomOS needs calendar access to show upcoming meetings and create prep tasks.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app;
 				PRODUCT_NAME = TomOS;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -574,8 +602,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSShare/TomOSShare.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
-				INFOPLIST_FILE = TomOS/Info.plist;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSShare/Info.plist;
@@ -587,7 +614,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.share;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -604,8 +631,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSShare/TomOSShare.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
-				INFOPLIST_FILE = TomOS/Info.plist;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSShare/Info.plist;
@@ -617,7 +643,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.share;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -637,8 +663,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSWidget/TomOSWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
-				INFOPLIST_FILE = TomOS/Info.plist;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSWidget/Info.plist;
@@ -650,7 +675,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -669,8 +694,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSWidget/TomOSWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
-				INFOPLIST_FILE = TomOS/Info.plist;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSWidget/Info.plist;
@@ -682,7 +706,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;

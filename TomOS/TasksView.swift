@@ -1,5 +1,11 @@
 import SwiftUI
 
+// MARK: - Notification Names
+
+extension Notification.Name {
+    static let tasksCreated = Notification.Name("tasksCreated")
+}
+
 // MARK: - Shared Models (Cross-platform)
 
 enum TaskFilter: String, CaseIterable, Identifiable {
@@ -12,14 +18,7 @@ enum TaskFilter: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-struct TaskItem: Identifiable, Codable {
-    let id: String
-    let title: String
-    let status: String
-    let priority: String?
-    let context: [String]?
-    let dueDate: String?
-}
+// TaskItem is now defined in APIService.swift
 
 // MARK: - iOS-Only Views
 
@@ -80,9 +79,25 @@ struct TasksView: View {
                 } else {
                     List {
                         ForEach(filteredTasks) { task in
-                            TaskRow(task: task, onComplete: {
-                                completeTask(task)
-                            })
+                            NavigationLink(destination: TaskDetailView(task: task)) {
+                                HStack(alignment: .top, spacing: 12) {
+                                    // Status indicator
+                                    Image(systemName: task.status == "Done" ? "checkmark.circle.fill" : "circle")
+                                        .font(.title2)
+                                        .foregroundStyle(task.status == "Done" ? .green : .gray)
+
+                                    // Task content
+                                    TaskContentView(task: task)
+                                }
+                            }
+                            .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                Button {
+                                    completeTask(task)
+                                } label: {
+                                    Label("Complete", systemImage: "checkmark.circle.fill")
+                                }
+                                .tint(.green)
+                            }
                         }
                     }
                     .listStyle(.plain)
@@ -105,6 +120,11 @@ struct TasksView: View {
         .onAppear {
             if tasks.isEmpty {
                 fetchTasks()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .tasksCreated)) { _ in
+            Task {
+                await refreshTasks()
             }
         }
     }
@@ -177,56 +197,42 @@ struct TasksView: View {
     }
 }
 
-// MARK: - Task Row
+// MARK: - Task Content View
 
-struct TaskRow: View {
+/// Task details view (used inside NavigationLink)
+struct TaskContentView: View {
     let task: TaskItem
-    let onComplete: () -> Void
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            // Complete button
-            Button {
-                onComplete()
-            } label: {
-                Image(systemName: task.status == "Done" ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
-                    .foregroundStyle(task.status == "Done" ? .green : .gray)
-            }
-            .buttonStyle(.borderless)
+        VStack(alignment: .leading, spacing: 6) {
+            // Title
+            Text(task.title)
+                .font(.body)
+                .strikethrough(task.status == "Done")
+                .foregroundStyle(task.status == "Done" ? .secondary : .primary)
 
-            VStack(alignment: .leading, spacing: 6) {
-                // Title
-                Text(task.title)
-                    .font(.body)
-                    .strikethrough(task.status == "Done")
-                    .foregroundStyle(task.status == "Done" ? .secondary : .primary)
+            // Metadata
+            HStack(spacing: 8) {
+                if let priority = task.priority, priority != "Someday" {
+                    Label(priority, systemImage: priorityIcon(priority))
+                        .font(.caption)
+                        .foregroundStyle(priorityColor(priority))
+                }
 
-                // Metadata
-                HStack(spacing: 8) {
-                    if let priority = task.priority, priority != "Someday" {
-                        Label(priority, systemImage: priorityIcon(priority))
-                            .font(.caption)
-                            .foregroundStyle(priorityColor(priority))
-                    }
+                if let context = task.context?.first {
+                    Text(context)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
 
-                    if let context = task.context?.first {
-                        Text(context)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    if let dueDate = task.dueDate {
-                        Text(formatDate(dueDate))
-                            .font(.caption)
-                            .foregroundStyle(isPastDue(dueDate) ? .red : .secondary)
-                    }
+                if let dueDate = task.dueDate {
+                    Text(formatDate(dueDate))
+                        .font(.caption)
+                        .foregroundStyle(isPastDue(dueDate) ? .red : .secondary)
                 }
             }
-
-            Spacer()
         }
-        .padding(.vertical, 4)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func priorityIcon(_ priority: String) -> String {

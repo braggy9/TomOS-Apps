@@ -6,14 +6,113 @@ import UIKit
 import AppKit
 #endif
 
+// MARK: - Response Models
+
+struct TaskResponse: Codable {
+    let success: Bool
+    let notionPageId: String
+    let parsedTask: ParsedTaskDetails
+    let message: String
+}
+
+struct ParsedTaskDetails: Codable {
+    let title: String
+    let priority: String
+    let context: String
+    let energy: String
+    let time: String
+    let dueDate: String?
+    let subtasks: [String]
+    let tags: [String]
+    let mentions: [String]
+}
+
+struct TaskItem: Identifiable, Codable {
+    let id: String
+    let title: String
+    let status: String
+    let priority: String?
+    let context: [String]?
+    let dueDate: String?
+}
+
+struct BatchResponse: Codable {
+    let success: Bool
+    let taskCount: Int
+    let tasks: [BatchTask]
+    let message: String
+}
+
+struct BatchTask: Codable {
+    let pageId: String
+    let title: String
+    let priority: String
+    let dueDate: String?
+}
+
+struct SmartSurfaceResponse: Codable {
+    let recommendations: [Recommendation]
+    let overallAdvice: String
+}
+
+struct Recommendation: Codable, Identifiable {
+    let id = UUID()
+    let index: Int
+    let title: String
+    let reason: String
+    let priority: String?
+    let context: String?
+
+    enum CodingKeys: String, CodingKey {
+        case index, title, reason, priority, context
+    }
+}
+
+// MARK: - API Service
+
 /// Cross-platform API service for TomOS.
 /// Works on both iOS and macOS with platform-specific URL handling.
 class APIService {
     static let shared = APIService()
     private let baseURL = "https://tomos-task-api.vercel.app"
 
+    // MARK: - Task Creation
+
+    /// Creates a single task with tag support
+    /// - Parameters:
+    ///   - task: Task title/description
+    ///   - tags: Array of tag names (e.g., ["proj:mixtape", "area:work"])
+    ///   - context: Optional context override (e.g., "Work", "Personal")
+    /// - Returns: Task creation response with suggested tags
+    func createTask(task: String, tags: [String], context: String? = nil) async throws -> TaskResponse {
+        let url = URL(string: "\(baseURL)/api/task")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        var body: [String: Any] = [
+            "task": task,
+            "tags": tags,
+            "suggest_tags": true
+        ]
+
+        if let context = context {
+            body["context"] = context
+        }
+
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.networkError(statusCode: httpResponse.statusCode)
+        }
+
+        return try JSONDecoder().decode(TaskResponse.self, from: data)
+    }
+
     // MARK: - Brain Dump
-    func batchImport(tasks: String) async throws -> BatchResponse {
+    func batchImport(tasks: String, tags: [String] = []) async throws -> BatchResponse {
         // Split tasks by newline or comma
         let taskLines = tasks
             .components(separatedBy: CharacterSet.newlines)
@@ -21,7 +120,7 @@ class APIService {
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
 
-        print("📝 Processing \(taskLines.count) tasks")
+        print("📝 Processing \(taskLines.count) tasks with tags: \(tags)")
 
         var createdTasks: [BatchTask] = []
 
@@ -36,7 +135,8 @@ class APIService {
 
             let body: [String: Any] = [
                 "task": taskLine,
-                "source": "TomOS iOS App"
+                "source": "TomOS iOS App",
+                "tags": tags
             ]
             request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
@@ -99,6 +199,47 @@ class APIService {
     }
 
     // MARK: - Task Actions
+
+    /// Updates a task in Notion
+    /// - Parameters:
+    ///   - taskId: The Notion page ID of the task
+    ///   - title: Optional new title
+    ///   - status: Optional new status
+    ///   - priority: Optional new priority
+    ///   - context: Optional new context array
+    ///   - dueDate: Optional new due date (ISO 8601 string)
+    ///   - tags: Optional new tags array
+    func updateTask(
+        taskId: String,
+        title: String? = nil,
+        status: String? = nil,
+        priority: String? = nil,
+        context: [String]? = nil,
+        dueDate: String? = nil,
+        tags: [String]? = nil
+    ) async throws {
+        let url = URL(string: "\(baseURL)/api/task/\(taskId)")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        var body: [String: Any] = [:]
+
+        if let title = title { body["title"] = title }
+        if let status = status { body["status"] = status }
+        if let priority = priority { body["priority"] = priority }
+        if let context = context { body["context"] = context }
+        if let dueDate = dueDate { body["dueDate"] = dueDate }
+        if let tags = tags { body["tags"] = tags }
+
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.taskActionFailed(action: "update", statusCode: httpResponse.statusCode)
+        }
+    }
 
     /// Marks a task as completed in Notion
     /// - Parameter taskId: The Notion page ID of the task
@@ -233,6 +374,160 @@ class APIService {
         let tasksResponse = try JSONDecoder().decode(TasksResponse.self, from: data)
         return tasksResponse.tasks
     }
+
+    // MARK: - MatterOS API
+
+    /// Fetches all matters from the backend
+    func getMatters(status: String? = nil, priority: String? = nil, limit: Int = 50) async throws -> [Matter] {
+        var components = URLComponents(string: "\(baseURL)/api/matters")!
+        var queryItems: [URLQueryItem] = []
+
+        if let status = status {
+            queryItems.append(URLQueryItem(name: "status", value: status))
+        }
+        if let priority = priority {
+            queryItems.append(URLQueryItem(name: "priority", value: priority))
+        }
+        queryItems.append(URLQueryItem(name: "limit", value: "\(limit)"))
+
+        components.queryItems = queryItems.isEmpty ? nil : queryItems
+
+        let (data, response) = try await URLSession.shared.data(from: components.url!)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.networkError(statusCode: httpResponse.statusCode)
+        }
+
+        let mattersResponse = try JSONDecoder().decode(MattersResponse.self, from: data)
+        return mattersResponse.data
+    }
+
+    /// Fetches a single matter with all related data
+    func getMatter(id: String) async throws -> Matter {
+        let url = URL(string: "\(baseURL)/api/matters/\(id)")!
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.networkError(statusCode: httpResponse.statusCode)
+        }
+
+        let matterResponse = try JSONDecoder().decode(MatterResponse.self, from: data)
+        return matterResponse.data
+    }
+
+    /// Creates a new matter
+    func createMatter(
+        title: String,
+        client: String,
+        type: String,
+        description: String? = nil,
+        priority: String? = nil,
+        leadCounsel: String? = nil,
+        practiceArea: String? = nil,
+        jurisdiction: String? = nil
+    ) async throws -> Matter {
+        let url = URL(string: "\(baseURL)/api/matters")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        var body: [String: Any] = [
+            "title": title,
+            "client": client,
+            "type": type
+        ]
+
+        if let description = description { body["description"] = description }
+        if let priority = priority { body["priority"] = priority }
+        if let leadCounsel = leadCounsel { body["leadCounsel"] = leadCounsel }
+        if let practiceArea = practiceArea { body["practiceArea"] = practiceArea }
+        if let jurisdiction = jurisdiction { body["jurisdiction"] = jurisdiction }
+
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.networkError(statusCode: httpResponse.statusCode)
+        }
+
+        let matterResponse = try JSONDecoder().decode(MatterResponse.self, from: data)
+        return matterResponse.data
+    }
+
+    /// Updates an existing matter
+    func updateMatter(
+        id: String,
+        title: String? = nil,
+        description: String? = nil,
+        status: String? = nil,
+        priority: String? = nil
+    ) async throws -> Matter {
+        let url = URL(string: "\(baseURL)/api/matters/\(id)")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        var body: [String: Any] = [:]
+        if let title = title { body["title"] = title }
+        if let description = description { body["description"] = description }
+        if let status = status { body["status"] = status }
+        if let priority = priority { body["priority"] = priority }
+
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.taskActionFailed(action: "update matter", statusCode: httpResponse.statusCode)
+        }
+
+        let matterResponse = try JSONDecoder().decode(MatterResponse.self, from: data)
+        return matterResponse.data
+    }
+
+    /// Fetches documents for a matter
+    func getMatterDocuments(matterId: String) async throws -> [MatterDocument] {
+        let url = URL(string: "\(baseURL)/api/matters/\(matterId)/documents")!
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.networkError(statusCode: httpResponse.statusCode)
+        }
+
+        let documentsResponse = try JSONDecoder().decode(MatterDocumentsResponse.self, from: data)
+        return documentsResponse.data
+    }
+
+    /// Fetches events (activity timeline) for a matter
+    func getMatterEvents(matterId: String) async throws -> [MatterEvent] {
+        let url = URL(string: "\(baseURL)/api/matters/\(matterId)/events")!
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.networkError(statusCode: httpResponse.statusCode)
+        }
+
+        let eventsResponse = try JSONDecoder().decode(MatterEventsResponse.self, from: data)
+        return eventsResponse.data
+    }
+
+    /// Fetches notes for a matter
+    func getMatterNotes(matterId: String) async throws -> [MatterNote] {
+        let url = URL(string: "\(baseURL)/api/matters/\(matterId)/notes")!
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            throw APIError.networkError(statusCode: httpResponse.statusCode)
+        }
+
+        let notesResponse = try JSONDecoder().decode(MatterNotesResponse.self, from: data)
+        return notesResponse.data
+    }
 }
 
 // MARK: - API Errors
@@ -254,35 +549,3 @@ enum APIError: LocalizedError {
     }
 }
 
-// MARK: - Response Models
-struct BatchResponse: Codable {
-    let success: Bool
-    let taskCount: Int
-    let tasks: [BatchTask]
-    let message: String
-}
-
-struct BatchTask: Codable {
-    let pageId: String
-    let title: String
-    let priority: String
-    let dueDate: String?
-}
-
-struct SmartSurfaceResponse: Codable {
-    let recommendations: [Recommendation]
-    let overallAdvice: String
-}
-
-struct Recommendation: Codable, Identifiable {
-    let id = UUID()
-    let index: Int
-    let title: String
-    let reason: String
-    let priority: String?
-    let context: String?
-
-    enum CodingKeys: String, CodingKey {
-        case index, title, reason, priority, context
-    }
-}

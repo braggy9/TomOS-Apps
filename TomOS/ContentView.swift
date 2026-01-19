@@ -7,6 +7,7 @@ extension Notification.Name {
     static let openSmartSurface = Notification.Name("openSmartSurface")
     static let openQuickCapture = Notification.Name("openQuickCapture")
     static let openQuickAdd = Notification.Name("openQuickAdd")
+    static let openMatters = Notification.Name("openMatters")
 }
 
 struct ContentView: View {
@@ -27,11 +28,17 @@ struct ContentView: View {
                 .tag(1)
 
             #if os(iOS)
+            MattersView()
+                .tabItem {
+                    Label("Matters", systemImage: "briefcase")
+                }
+                .tag(2)
+
             TasksView()
                 .tabItem {
                     Label("My Tasks", systemImage: "checklist")
                 }
-                .tag(2)
+                .tag(3)
             #endif
 
             NavigationStack {
@@ -40,13 +47,13 @@ struct ContentView: View {
             .tabItem {
                 Label("Calendar", systemImage: "calendar")
             }
-            .tag(3)
+            .tag(4)
 
             MoreView()
                 .tabItem {
                     Label("More", systemImage: "ellipsis.circle")
                 }
-                .tag(4)
+                .tag(5)
         }
         .tint(.purple)
         .onReceive(NotificationCenter.default.publisher(for: .openBrainDump)) { _ in
@@ -54,6 +61,11 @@ struct ContentView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: .openSmartSurface)) { _ in
             selectedTab = 1
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openMatters)) { _ in
+            #if os(iOS)
+            selectedTab = 2
+            #endif
         }
         .onReceive(NotificationCenter.default.publisher(for: .openQuickAdd)) { _ in
             // Quick Add opens Brain Dump for fast task entry

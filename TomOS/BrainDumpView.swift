@@ -2,9 +2,17 @@ import SwiftUI
 
 struct BrainDumpView: View {
     @State private var tasksText = ""
+    @State private var selectedTags: Set<String> = []
+    @State private var showTagPicker = false
     @State private var isLoading = false
     @State private var toast: Toast?
     @FocusState private var isTextEditorFocused: Bool
+    @StateObject private var tagService = TagService()
+
+    var suggestedTags: [Tag] {
+        guard !tasksText.isEmpty else { return [] }
+        return tagService.suggestTags(for: tasksText, context: nil)
+    }
 
     var body: some View {
         NavigationStack {
@@ -66,6 +74,35 @@ struct BrainDumpView: View {
                     }
                 }
 
+                // Selected Tags Display
+                if !selectedTags.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Tags:")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal)
+
+                        SelectedTagsView(selectedTags: $selectedTags)
+                            .padding(.horizontal)
+                    }
+                }
+
+                // Tag Picker Button
+                Button {
+                    showTagPicker = true
+                } label: {
+                    HStack {
+                        Image(systemName: "tag")
+                        Text(selectedTags.isEmpty ? "Add Tags" : "Edit Tags (\(selectedTags.count))")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue.opacity(0.1))
+                    .foregroundColor(.blue)
+                    .cornerRadius(12)
+                }
+                .padding(.horizontal)
+
                 // Submit Button
                 Button(action: submitTasks) {
                     HStack {
@@ -92,6 +129,26 @@ struct BrainDumpView: View {
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .toast($toast)
+            .sheet(isPresented: $showTagPicker) {
+                NavigationStack {
+                    TagPickerView(
+                        selectedTags: $selectedTags,
+                        suggestedTags: suggestedTags
+                    )
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
+                                showTagPicker = false
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") {
+                                showTagPicker = false
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -101,18 +158,38 @@ struct BrainDumpView: View {
 
         Task {
             do {
-                let response = try await APIService.shared.batchImport(tasks: tasksText)
+                // Parse tasks from text (split by newlines)
+                let taskLines = tasksText
+                    .components(separatedBy: .newlines)
+                    .map { $0.trimmingCharacters(in: .whitespaces) }
+                    .filter { !$0.isEmpty }
+
+                var successCount = 0
+
+                // Create each task with selected tags
+                for taskLine in taskLines {
+                    _ = try await APIService.shared.createTask(
+                        task: taskLine,
+                        tags: Array(selectedTags),
+                        context: nil
+                    )
+                    successCount += 1
+                }
+
                 await MainActor.run {
                     isLoading = false
 
                     // Show success toast
-                    let count = response.taskCount
                     withAnimation {
-                        toast = .success("Created \(count) task\(count == 1 ? "" : "s")!")
+                        toast = .success("Created \(successCount) task\(successCount == 1 ? "" : "s")!")
                     }
 
-                    // Clear text field
+                    // Clear text and tags
                     tasksText = ""
+                    selectedTags = []
+
+                    // Notify Tasks View to refresh
+                    NotificationCenter.default.post(name: .tasksCreated, object: nil)
 
                     // Haptic feedback on success
                     #if os(iOS)
@@ -120,12 +197,16 @@ struct BrainDumpView: View {
                     #endif
                 }
             } catch {
+                print("❌ BrainDump: Task creation failed with error: \(error)")
+                print("   Error details: \(String(describing: error))")
+
                 await MainActor.run {
                     isLoading = false
 
-                    // Show error toast
+                    // Show error toast with details
+                    let errorMessage = (error as? APIError)?.errorDescription ?? error.localizedDescription
                     withAnimation {
-                        toast = .error("Failed to create tasks")
+                        toast = .error("Failed to create tasks: \(errorMessage)")
                     }
 
                     // Error haptic
