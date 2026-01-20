@@ -70,7 +70,7 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 
 ## Recent Build History
 
-### Build 14 (2026-01-19) - CURRENT (In Development)
+### Build 14 (2026-01-21) - CURRENT (Ready for TestFlight)
 **Changes:**
 - Added MatterOS integration for legal practice management
 - New Matters tab between Smart Surface and My Tasks
@@ -91,6 +91,18 @@ Native Swift applications for ADHD-friendly task management across Apple platfor
 **Files Modified:**
 - `ContentView.swift` - Added Matters tab, updated tag numbers
 - `APIService.swift` - Added MatterOS methods
+- `TomOS.macOS.entitlements` - Added AppleEvents exception for Outlook (CRITICAL FIX)
+- `Info.plist` - Added NSAppleEventsUsageDescription
+- Cross-platform fixes: CreateMatterView, MatterDetailView, MattersView
+
+**CRITICAL FIX - Email-to-Task (macOS):**
+- Added `com.apple.security.temporary-exception.apple-events` entitlement
+- Fixes ⌘⌥E email-to-task functionality on macOS
+- User must grant Outlook automation permission on first use
+
+**Archive Location:**
+- `/Users/tombragg/Desktop/TomOS-Apps/build/TomOS-Build14.xcarchive`
+- Ready to distribute via Xcode Organizer → Distribute App → App Store Connect
 
 ### Build 13 (2026-01-16) - Previous Release
 **Changes:**

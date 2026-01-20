@@ -75,7 +75,7 @@
 
 /* Begin PBXFileReference section */
 		1A7BF9973FE44081B49790FA /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
-		31E80F2E3BA6DB1EB5C0449B /* Matter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Matter.swift; path = Matter.swift; sourceTree = "<group>"; };
+		31E80F2E3BA6DB1EB5C0449B /* Matter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Matter.swift; sourceTree = "<group>"; };
 		418FCA36C5644AF9FE23F9B7 /* MattersView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MattersView.swift; sourceTree = "<group>"; };
 		68549870D85A4B1199DF05DB /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		C0065D888A9185F99E68C1DD /* MatterDetailView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MatterDetailView.swift; sourceTree = "<group>"; };
@@ -444,13 +444,15 @@
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = TomOS/TomOS.macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_MOVIES_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_MUSIC_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = YES;
@@ -535,13 +537,15 @@
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = TomOS/TomOS.macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_MOVIES_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_MUSIC_FOLDER = readwrite;
 				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = YES;
@@ -602,7 +606,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSShare/TomOSShare.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSShare/Info.plist;
@@ -631,7 +635,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSShare/TomOSShare.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSShare/Info.plist;
@@ -663,7 +667,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSWidget/TomOSWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSWidget/Info.plist;
@@ -694,7 +698,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSWidget/TomOSWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSWidget/Info.plist;
