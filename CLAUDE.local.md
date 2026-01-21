@@ -97,13 +97,28 @@ rm -rf /Applications/TomOS.app && cp -R "$APP_PATH" /Applications/TomOS.app
 - Accessibility (for global shortcuts)
 - Automation (for Outlook/AppleEvents) - **NEW**
 
+### TestFlight Upload Status
+
+**Build 14 (Version 1.2) - READY BUT BLOCKED**
+- ✅ Archive created successfully
+- ✅ Export succeeded (.ipa created)
+- ❌ Upload failed - Apple App Store Connect servers down (HTTP 500)
+- **Archive Location:** `/Users/tombragg/Desktop/TomOS-Apps/build/TomOS-Build14.xcarchive`
+
+**Error:** "An unexpected error occurred on the server side" (Apple's issue, not ours)
+
+**Action:** Retry upload via Xcode Organizer when Apple services recover
+- Open Xcode → Window → Organizer
+- Select Build 14 (Version 1.2, dated 21 Jan 2026)
+- Distribute App → App Store Connect → Upload
+
 ### Next Steps (User's Priority List)
+- [ ] **RETRY TestFlight upload** when Apple servers recover (check https://developer.apple.com/system-status/)
 - [ ] Test email-to-task functionality (⌘⌥E) - verify permission prompt works
 - [ ] Consider linking email-to-task to MatterOS (e.g., attach email to matter)
 - [ ] Review and enhance iOS/macOS app functionality
 - [ ] Consider easy ways to add tasks in iOS
 - [ ] Build web dashboard (lower priority)
-- [ ] Deploy Build 14 to TestFlight
 
 ---
 
