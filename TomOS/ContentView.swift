@@ -8,10 +8,15 @@ extension Notification.Name {
     static let openQuickCapture = Notification.Name("openQuickCapture")
     static let openQuickAdd = Notification.Name("openQuickAdd")
     static let openMatters = Notification.Name("openMatters")
+    static let openNotes = Notification.Name("openNotes")
+    static let openFitness = Notification.Name("openFitness")
+    static let openQuickLog = Notification.Name("openQuickLog")
+    static let fitnessSessionLogged = Notification.Name("fitnessSessionLogged")
 }
 
 struct ContentView: View {
-    @State private var selectedTab = 0
+    /// Persisted tab selection - user returns to last viewed tab
+    @AppStorage("selectedTab") private var selectedTab = 0
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -27,19 +32,19 @@ struct ContentView: View {
                 }
                 .tag(1)
 
-            #if os(iOS)
-            MattersView()
-                .tabItem {
-                    Label("Matters", systemImage: "briefcase")
-                }
-                .tag(2)
+            NavigationStack {
+                MattersView()
+            }
+            .tabItem {
+                Label("Matters", systemImage: "briefcase")
+            }
+            .tag(2)
 
             TasksView()
                 .tabItem {
                     Label("My Tasks", systemImage: "checklist")
                 }
                 .tag(3)
-            #endif
 
             NavigationStack {
                 CalendarSyncView()
@@ -49,11 +54,26 @@ struct ContentView: View {
             }
             .tag(4)
 
+            NavigationStack {
+                NotesView()
+            }
+            .tabItem {
+                Label("Notes", systemImage: "note.text")
+            }
+            .tag(5)
+
+            // MARK: - FitnessView disabled until files are added to Xcode project
+            // FitnessView()
+            //     .tabItem {
+            //         Label("Fitness", systemImage: "figure.strengthtraining.traditional")
+            //     }
+            //     .tag(6)
+
             MoreView()
                 .tabItem {
                     Label("More", systemImage: "ellipsis.circle")
                 }
-                .tag(5)
+                .tag(6)  // Was 7, now 6 since FitnessView disabled
         }
         .tint(.purple)
         .onReceive(NotificationCenter.default.publisher(for: .openBrainDump)) { _ in
@@ -63,9 +83,13 @@ struct ContentView: View {
             selectedTab = 1
         }
         .onReceive(NotificationCenter.default.publisher(for: .openMatters)) { _ in
-            #if os(iOS)
             selectedTab = 2
-            #endif
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openNotes)) { _ in
+            selectedTab = 5
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openFitness)) { _ in
+            selectedTab = 6
         }
         .onReceive(NotificationCenter.default.publisher(for: .openQuickAdd)) { _ in
             // Quick Add opens Brain Dump for fast task entry

@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+extension Notification.Name {
+    static let mattersCreated = Notification.Name("mattersCreated")
+}
+
 struct MattersView: View {
     @State private var matters: [Matter] = []
     @State private var isLoading = false
@@ -38,13 +42,7 @@ struct MattersView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 if isLoading {
-                    VStack(spacing: 16) {
-                        ProgressView()
-                        Text("Loading matters...")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    SkeletonMatterList()
                 } else if let error = errorMessage {
                     VStack(spacing: 16) {
                         Image(systemName: "exclamationmark.triangle")
@@ -64,10 +62,10 @@ struct MattersView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if filteredMatters.isEmpty {
-                    VStack(spacing: 16) {
+                    VStack(spacing: DesignSystem.Spacing.md) {
                         Image(systemName: "briefcase")
                             .font(.system(size: 60))
-                            .foregroundStyle(.purple.gradient)
+                            .foregroundStyle(DesignSystem.Colors.brand.gradient)
                         Text(matters.isEmpty ? "No matters yet" : "No \(selectedFilter.rawValue.lowercased()) matters")
                             .font(.headline)
                         Text("Create your first legal matter to get started")
@@ -145,7 +143,11 @@ struct MattersView: View {
         .toast($toast)
         .sheet(isPresented: $showingCreateSheet) {
             CreateMatterView(onMatterCreated: { newMatter in
+                // Optimistic update: add to local cache immediately
                 matters.insert(newMatter, at: 0)
+                Task {
+                    await TaskCache.shared.addMatter(newMatter)
+                }
                 toast = .success("Matter created!")
             })
         }
@@ -153,6 +155,9 @@ struct MattersView: View {
             if matters.isEmpty {
                 fetchMatters()
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .mattersCreated)) { _ in
+            fetchMatters()
         }
     }
 
@@ -162,14 +167,19 @@ struct MattersView: View {
 
         Task {
             do {
-                let fetchedMatters = try await APIService.shared.getMatters()
+                // Use TaskCache for better performance
+                let fetchedMatters = try await TaskCache.shared.getMatters()
                 await MainActor.run {
                     self.matters = fetchedMatters
                     self.isLoading = false
                 }
             } catch {
+                print("❌ MattersView: Failed to load matters - \(error)")
+                if let decodingError = error as? DecodingError {
+                    print("🔍 Decoding error details: \(decodingError)")
+                }
                 await MainActor.run {
-                    self.errorMessage = error.localizedDescription
+                    self.errorMessage = "Failed to load matters: \(error.localizedDescription)"
                     self.isLoading = false
                 }
             }
@@ -178,13 +188,15 @@ struct MattersView: View {
 
     private func refreshMatters() async {
         do {
-            let fetchedMatters = try await APIService.shared.getMatters()
+            // Force refresh from API
+            let fetchedMatters = try await TaskCache.shared.getMatters(forceRefresh: true)
             await MainActor.run {
                 self.matters = fetchedMatters
             }
         } catch {
+            print("❌ MattersView: Failed to refresh matters - \(error)")
             await MainActor.run {
-                self.toast = .error("Failed to refresh")
+                self.toast = .error("Failed to refresh: \(error.localizedDescription)")
             }
         }
     }
@@ -200,7 +212,7 @@ struct MatterRow: View {
             // Icon
             Image(systemName: matter.typeIcon)
                 .font(.title2)
-                .foregroundStyle(.purple)
+                .foregroundStyle(DesignSystem.Colors.brand.primary)
                 .frame(width: 32)
 
             // Content
@@ -234,7 +246,7 @@ struct MatterRow: View {
                         Text(matter.status.replacingOccurrences(of: "_", with: " "))
                             .font(.caption2)
                     }
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(DesignSystem.Colors.status.color(for: matter.status))
 
                     // Counts
                     if let counts = matter.counts {
@@ -270,13 +282,7 @@ struct MatterRow: View {
     }
 
     private func priorityColor(_ priority: String) -> Color {
-        switch priority.lowercased() {
-        case "urgent": return .red
-        case "high": return .orange
-        case "medium": return .blue
-        case "low": return .gray
-        default: return .blue
-        }
+        DesignSystem.Colors.priority.color(for: priority)
     }
 }
 

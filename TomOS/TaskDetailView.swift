@@ -1,8 +1,7 @@
 import SwiftUI
 
-#if os(iOS)
 struct TaskDetailView: View {
-    let task: TaskItem
+    let taskItem: TaskItem
     @Environment(\.dismiss) private var dismiss
 
     @State private var title: String
@@ -19,7 +18,7 @@ struct TaskDetailView: View {
     @StateObject private var tagService = TagService()
 
     init(task: TaskItem) {
-        self.task = task
+        self.taskItem = task
         _title = State(initialValue: task.title)
         _status = State(initialValue: task.status)
         _priority = State(initialValue: task.priority ?? "Someday")
@@ -142,7 +141,9 @@ struct TaskDetailView: View {
                 }
             }
             .navigationTitle("Edit Task")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -194,10 +195,10 @@ struct TaskDetailView: View {
                 }
 
                 try await APIService.shared.updateTask(
-                    taskId: task.id,
-                    title: title != task.title ? title : nil,
-                    status: status != task.status ? status : nil,
-                    priority: priority != task.priority ? priority : nil,
+                    taskId: taskItem.id,
+                    title: title != taskItem.title ? title : nil,
+                    status: status != taskItem.status ? status : nil,
+                    priority: priority != taskItem.priority ? priority : nil,
                     context: selectedContext.isEmpty ? nil : Array(selectedContext),
                     dueDate: dueDateString,
                     tags: selectedTags.isEmpty ? nil : Array(selectedTags)
@@ -213,6 +214,9 @@ struct TaskDetailView: View {
                     withAnimation {
                         toast = .success("Task updated!")
                     }
+
+                    // Notify other views to refresh
+                    NotificationCenter.default.post(name: .tasksCreated, object: nil)
 
                     // Dismiss after a short delay
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -254,4 +258,3 @@ struct TaskDetailView: View {
         dueDate: nil
     ))
 }
-#endif
