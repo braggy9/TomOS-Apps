@@ -252,6 +252,15 @@ struct CalendarSyncView: View {
                             .font(.largeTitle)
                             .foregroundColor(.orange)
 
+                        #if os(macOS)
+                        Text("Calendar Access")
+                            .font(.headline)
+
+                        Text("Also show events from your Mac calendar")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                        #else
                         Text("iOS Calendar Access")
                             .font(.headline)
 
@@ -259,6 +268,7 @@ struct CalendarSyncView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
+                        #endif
 
                         Button("Enable Calendar Access") {
                             Task {

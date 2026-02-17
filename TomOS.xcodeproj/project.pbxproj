@@ -7,27 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00DDB6954B46A886213D004C /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECBA3A47E74CE5F23444C11 /* Note.swift */; };
 		149D349DDF5971939E6F9305 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9C16615A59A960A603B0B2 /* NotesView.swift */; };
 		1B7736F907D54E3C28391EBF /* MattersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418FCA36C5644AF9FE23F9B7 /* MattersView.swift */; };
 		262EBC0FD135EE6A190D3BCB /* NoteDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FC0D3048AEC9B5123AE54A /* NoteDetailView.swift */; };
 		28F8821FD4C8FDA6314A3BB8 /* NoteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37170CA303EDBCFA9F46290 /* NoteRow.swift */; };
 		486F2D2297B399A1DD6DAB7C /* SmartLinkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7148647EEA052CA617A7CA6E /* SmartLinkRow.swift */; };
-		4E17003BADB9346F110C6722 /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46159F475CA4CCB5099DC4BB /* SkeletonView.swift */; };
-		60DFCDDA2FB79D9C90040CD0 /* TemplatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29C317674A5D27FDAE64AE6 /* TemplatePickerView.swift */; };
 		806ABC54B2BAEFFE23D40517 /* SmartLinkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C9E81F935A5863948B6C98 /* SmartLinkRow.swift */; };
 		824484737D3D03ECC3FD0CE5 /* TemplatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CE3D22688218BE0CC74D50 /* TemplatePickerView.swift */; };
 		8E231FB66A64F16DA30CD7AC /* CreateMatterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70092D500E26CA313A23B49 /* CreateMatterView.swift */; };
 		B622767F0E2D34E9A7B696F2 /* CreateNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1989EC5CA002BBFA169C828 /* CreateNoteView.swift */; };
 		B82EFEDFF1C08C4D9D9BADE9 /* MatterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0065D888A9185F99E68C1DD /* MatterDetailView.swift */; };
 		D9DE0146AFCECE50C914CEC6 /* NoteDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2C4033AEDF12F8E0E9B63F /* NoteDetailView.swift */; };
-		DD37756FF4F0E4BAF543B7E8 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F275C214E2121C9D3411D17 /* NotesView.swift */; };
 		DE91FC335646498485E99AAA /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7BF9973FE44081B49790FA /* TasksView.swift */; };
-		DEC37CC538CEA914073D48B8 /* TaskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCDC528F581955BDB7612C8 /* TaskCache.swift */; };
-		E126BFD8F3C96D31F7C1EE49 /* CreateNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB83A2423337F72E32468B6 /* CreateNoteView.swift */; };
-		E5A1AFB63B7439DBB4873850 /* NoteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9D89D92C531097F3035D76 /* NoteRow.swift */; };
-		EFEEA5EFD3037553CB6FD256 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F84B7FEA26DE8A8E1C8EFE8 /* DesignSystem.swift */; };
 		F1000001 /* TomOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000002 /* TomOSApp.swift */; };
+		F10000A3 /* TaskTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3C4D5E6F7A8B9C0D1E2F3A /* TaskTemplate.swift */; };
+		F10000A5 /* TaskTemplatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5E6F7A8B9C0D1E2F3B4C5D /* TaskTemplatePickerView.swift */; };
 		F1000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000004 /* ContentView.swift */; };
 		F1000005 /* BrainDumpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000006 /* BrainDumpView.swift */; };
 		F1000007 /* SmartSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000008 /* SmartSurfaceView.swift */; };
@@ -89,19 +83,17 @@
 /* Begin PBXFileReference section */
 		1A7BF9973FE44081B49790FA /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
 		3CB83A2423337F72E32468B6 /* CreateNoteView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CreateNoteView.swift; path = TomOS/CreateNoteView.swift; sourceTree = "<group>"; };
-		3ECBA3A47E74CE5F23444C11 /* Note.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Note.swift; path = TomOS/Note.swift; sourceTree = "<group>"; };
+		7D5E6F7A8B9C0D1E2F3B4C5D /* TaskTemplatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTemplatePickerView.swift; sourceTree = "<group>"; };
+		5B3C4D5E6F7A8B9C0D1E2F3A /* TaskTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTemplate.swift; sourceTree = "<group>"; };
 		418FCA36C5644AF9FE23F9B7 /* MattersView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MattersView.swift; sourceTree = "<group>"; };
-		46159F475CA4CCB5099DC4BB /* SkeletonView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SkeletonView.swift; path = TomOS/SkeletonView.swift; sourceTree = "<group>"; };
-		56FC0D3048AEC9B5123AE54A /* NoteDetailView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NoteDetailView.swift; path = TomOS/NoteDetailView.swift; sourceTree = "<group>"; };
-		7148647EEA052CA617A7CA6E /* SmartLinkRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SmartLinkRow.swift; path = TomOS/SmartLinkRow.swift; sourceTree = "<group>"; };
+		56FC0D3048AEC9B5123AE54A /* NoteDetailView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NoteDetailView.swift; sourceTree = "<group>"; };
+		7148647EEA052CA617A7CA6E /* SmartLinkRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SmartLinkRow.swift; sourceTree = "<group>"; };
 		7D9D89D92C531097F3035D76 /* NoteRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NoteRow.swift; path = TomOS/NoteRow.swift; sourceTree = "<group>"; };
 		7F275C214E2121C9D3411D17 /* NotesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NotesView.swift; path = TomOS/NotesView.swift; sourceTree = "<group>"; };
-		9F84B7FEA26DE8A8E1C8EFE8 /* DesignSystem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DesignSystem.swift; path = TomOS/DesignSystem.swift; sourceTree = "<group>"; };
 		B0C9E81F935A5863948B6C98 /* SmartLinkRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SmartLinkRow.swift; sourceTree = "<group>"; };
 		BC9C16615A59A960A603B0B2 /* NotesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		C0065D888A9185F99E68C1DD /* MatterDetailView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MatterDetailView.swift; sourceTree = "<group>"; };
 		C37170CA303EDBCFA9F46290 /* NoteRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NoteRow.swift; sourceTree = "<group>"; };
-		CCCDC528F581955BDB7612C8 /* TaskCache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskCache.swift; path = TomOS/TaskCache.swift; sourceTree = "<group>"; };
 		D3CE3D22688218BE0CC74D50 /* TemplatePickerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TemplatePickerView.swift; sourceTree = "<group>"; };
 		D70092D500E26CA313A23B49 /* CreateMatterView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreateMatterView.swift; sourceTree = "<group>"; };
 		EE2C4033AEDF12F8E0E9B63F /* NoteDetailView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NoteDetailView.swift; sourceTree = "<group>"; };
@@ -132,7 +124,7 @@
 		F2000003 /* TomOSShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TomOSShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F2000006 /* TomOSShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TomOSShare.entitlements; sourceTree = "<group>"; };
-		F29C317674A5D27FDAE64AE6 /* TemplatePickerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TemplatePickerView.swift; path = TomOS/TemplatePickerView.swift; sourceTree = "<group>"; };
+		F29C317674A5D27FDAE64AE6 /* TemplatePickerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TemplatePickerView.swift; sourceTree = "<group>"; };
 		F3000002 /* TomOSWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TomOSWidget.swift; sourceTree = "<group>"; };
 		F3000004 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F3000005 /* TomOSWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TomOSWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,6 +162,8 @@
 			isa = PBXGroup;
 			children = (
 				F1000002 /* TomOSApp.swift */,
+				5B3C4D5E6F7A8B9C0D1E2F3A /* TaskTemplate.swift */,
+				7D5E6F7A8B9C0D1E2F3B4C5D /* TaskTemplatePickerView.swift */,
 				F1000031 /* AppDelegate.swift */,
 				F1000043 /* AppIntents.swift */,
 				F1000045 /* LiveActivityManager.swift */,
@@ -200,16 +194,12 @@
 				C37170CA303EDBCFA9F46290 /* NoteRow.swift */,
 				EE2C4033AEDF12F8E0E9B63F /* NoteDetailView.swift */,
 				BC9C16615A59A960A603B0B2 /* NotesView.swift */,
-				3ECBA3A47E74CE5F23444C11 /* Note.swift */,
 				7F275C214E2121C9D3411D17 /* NotesView.swift */,
 				56FC0D3048AEC9B5123AE54A /* NoteDetailView.swift */,
 				7D9D89D92C531097F3035D76 /* NoteRow.swift */,
 				3CB83A2423337F72E32468B6 /* CreateNoteView.swift */,
 				F29C317674A5D27FDAE64AE6 /* TemplatePickerView.swift */,
 				7148647EEA052CA617A7CA6E /* SmartLinkRow.swift */,
-				9F84B7FEA26DE8A8E1C8EFE8 /* DesignSystem.swift */,
-				CCCDC528F581955BDB7612C8 /* TaskCache.swift */,
-				46159F475CA4CCB5099DC4BB /* SkeletonView.swift */,
 			);
 			path = TomOS;
 			sourceTree = "<group>";
@@ -388,7 +378,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F10000A3 /* TaskTemplate.swift in Sources */,
+				F10000A4 /* ToastView.swift in Sources */,
+				F10000A2 /* Matter.swift in Sources */,
+				F10000A5 /* TaskTemplatePickerView.swift in Sources */,
 				F1000001 /* TomOSApp.swift in Sources */,
+				F10000A1 /* APIService.swift in Sources */,
 				F1000030 /* AppDelegate.swift in Sources */,
 				F1000042 /* AppIntents.swift in Sources */,
 				F1000044 /* LiveActivityManager.swift in Sources */,
@@ -417,12 +412,6 @@
 				D9DE0146AFCECE50C914CEC6 /* NoteDetailView.swift in Sources */,
 				149D349DDF5971939E6F9305 /* NotesView.swift in Sources */,
 				00DDB6954B46A886213D004C /* Note.swift in Sources */,
-				DD37756FF4F0E4BAF543B7E8 /* NotesView.swift in Sources */,
-				262EBC0FD135EE6A190D3BCB /* NoteDetailView.swift in Sources */,
-				E5A1AFB63B7439DBB4873850 /* NoteRow.swift in Sources */,
-				E126BFD8F3C96D31F7C1EE49 /* CreateNoteView.swift in Sources */,
-				60DFCDDA2FB79D9C90040CD0 /* TemplatePickerView.swift in Sources */,
-				486F2D2297B399A1DD6DAB7C /* SmartLinkRow.swift in Sources */,
 				EFEEA5EFD3037553CB6FD256 /* DesignSystem.swift in Sources */,
 				DEC37CC538CEA914073D48B8 /* TaskCache.swift in Sources */,
 				4E17003BADB9346F110C6722 /* SkeletonView.swift in Sources */,
@@ -492,7 +481,7 @@
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = TomOS/TomOS.macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				ENABLE_APP_SANDBOX = YES;
@@ -538,7 +527,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app;
 				PRODUCT_NAME = TomOS;
@@ -585,7 +574,7 @@
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = TomOS/TomOS.macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				ENABLE_APP_SANDBOX = YES;
@@ -630,7 +619,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app;
 				PRODUCT_NAME = TomOS;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -654,7 +643,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSShare/TomOSShare.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSShare/Info.plist;
@@ -666,7 +655,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.share;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -683,7 +672,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSShare/TomOSShare.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSShare/Info.plist;
@@ -695,7 +684,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.share;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -715,7 +704,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSWidget/TomOSWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSWidget/Info.plist;
@@ -727,7 +716,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -746,7 +735,7 @@
 				CODE_SIGN_ENTITLEMENTS = TomOSWidget/TomOSWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 89NX9R78Y7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TomOSWidget/Info.plist;
@@ -758,7 +747,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomos.app.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;

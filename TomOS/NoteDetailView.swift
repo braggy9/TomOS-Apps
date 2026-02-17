@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TomOSShared
 
 struct NoteDetailView: View {
     let noteId: String
@@ -44,7 +45,7 @@ struct NoteDetailView: View {
                 // Error state
                 VStack(spacing: 16) {
                     Image(systemName: "exclamationmark.triangle")
-                        .font(.system(size: 48))
+                        .font(.system(.largeTitle))
                         .foregroundStyle(.orange)
                     Text("Failed to load note")
                         .font(.headline)
@@ -501,11 +502,7 @@ struct NoteDetailView: View {
             do {
                 let updatedNote = try await APIService.shared.updateNote(
                     id: note.id,
-                    title: nil,
-                    content: nil,
-                    tags: nil,
-                    priority: nil,
-                    status: nil
+                    isPinned: !note.isPinned
                 )
                 await TaskCache.shared.updateNote(updatedNote)
                 await MainActor.run {
@@ -521,8 +518,23 @@ struct NoteDetailView: View {
     }
 
     private func toggleConfidential(_ note: Note) {
-        // Similar to togglePin
-        toast = .info("Confidential toggle not yet implemented")
+        Task {
+            do {
+                let updatedNote = try await APIService.shared.updateNote(
+                    id: note.id,
+                    confidential: !note.confidential
+                )
+                await TaskCache.shared.updateNote(updatedNote)
+                await MainActor.run {
+                    self.note = updatedNote
+                    self.toast = .success(updatedNote.confidential ? "Marked confidential" : "Confidential removed")
+                }
+            } catch {
+                await MainActor.run {
+                    self.toast = .error("Failed to update")
+                }
+            }
+        }
     }
 
     private func duplicateNote(_ note: Note) {

@@ -1,4 +1,5 @@
 import SwiftUI
+import TomOSShared
 import UserNotifications
 
 /// View model that checks actual service connectivity
@@ -103,6 +104,8 @@ struct MoreView: View {
     @State private var isLoadingEOD = false
     @State private var showSuccess = false
     @State private var successMessage = ""
+    @State private var focusFilterEnabled = false
+    @State private var selectedFocus = "Work"
 
     var body: some View {
         NavigationStack {
@@ -121,7 +124,7 @@ struct MoreView: View {
                         Spacer()
 
                         Image(systemName: "brain.head.profile")
-                            .font(.system(size: 50))
+                            .font(.system(.largeTitle))
                             .foregroundStyle(.purple.gradient)
                     }
                     .padding(.vertical, 8)
@@ -233,6 +236,26 @@ struct MoreView: View {
                     }
                 }
 
+                #if os(iOS)
+                Section("Focus Mode") {
+                    Toggle("Enable Focus Filtering", isOn: $focusFilterEnabled)
+
+                    if focusFilterEnabled {
+                        Picker("Current Focus", selection: $selectedFocus) {
+                            Text("Work").tag("Work")
+                            Text("Personal").tag("Personal")
+                            Text("Deep Work").tag("Deep Work")
+                            Text("Meetings").tag("Meetings")
+                        }
+                        .pickerStyle(.segmented)
+
+                        Text("Tasks will be filtered based on your selected focus mode")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                #endif
+
                 Section("AI Powered By") {
                     HStack {
                         Image(systemName: "sparkles")
@@ -295,20 +318,24 @@ struct MoreView: View {
                     HStack {
                         Text("App Version")
                         Spacer()
-                        Text("1.0")
+                        Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")
                             .foregroundColor(.secondary)
                     }
 
                     HStack {
                         Text("Build")
                         Spacer()
-                        #if os(macOS)
-                        Text("macOS")
-                            .foregroundColor(.secondary)
-                        #else
-                        Text("iOS/iPadOS")
-                            .foregroundColor(.secondary)
-                        #endif
+                        HStack(spacing: 4) {
+                            Text(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—")
+                                .foregroundColor(.secondary)
+                            #if os(macOS)
+                            Text("· macOS")
+                                .foregroundColor(.secondary)
+                            #else
+                            Text("· iOS/iPadOS")
+                                .foregroundColor(.secondary)
+                            #endif
+                        }
                     }
                 }
 
@@ -338,7 +365,11 @@ struct MoreView: View {
                 try await APIService.shared.sendMorningOverview()
                 await MainActor.run {
                     isLoadingMorning = false
+                    #if os(macOS)
+                    successMessage = "Morning overview sent! Check your notifications 🔔"
+                    #else
                     successMessage = "Morning overview sent! Check your phone 📱"
+                    #endif
                     showSuccess = true
                 }
             } catch {
@@ -359,7 +390,11 @@ struct MoreView: View {
                 try await APIService.shared.sendEODSummary()
                 await MainActor.run {
                     isLoadingEOD = false
+                    #if os(macOS)
+                    successMessage = "EOD summary sent! Check your notifications 🔔"
+                    #else
                     successMessage = "EOD summary sent! Check your phone 📱"
+                    #endif
                     showSuccess = true
                 }
             } catch {

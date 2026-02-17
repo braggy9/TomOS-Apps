@@ -1,5 +1,6 @@
 #if os(macOS)
 import SwiftUI
+import TomOSShared
 import AppKit
 import UserNotifications
 
@@ -164,13 +165,6 @@ class MenuBarController: ObservableObject {
 
         menu?.addItem(NSMenuItem.separator())
 
-        // View All Tasks in Notion
-        let viewTasksItem = NSMenuItem(title: "📋 View All Tasks in Notion", action: #selector(openNotionTasks), keyEquivalent: "")
-        viewTasksItem.target = self
-        menu?.addItem(viewTasksItem)
-
-        menu?.addItem(NSMenuItem.separator())
-
         // Dashboard & Preferences
         let dashboardItem = NSMenuItem(title: "📊 Open Dashboard               ⌘⌥5", action: #selector(openDashboard), keyEquivalent: "")
         dashboardItem.target = self
@@ -232,7 +226,7 @@ class MenuBarController: ObservableObject {
                 let icon = task.priorityIcon
                 let taskItem = NSMenuItem(
                     title: "\(icon) \(task.title)",
-                    action: #selector(openTaskDetail(_:)),
+                    action: #selector(completeTaskFromMenu(_:)),
                     keyEquivalent: ""
                 )
                 taskItem.target = self
@@ -288,10 +282,10 @@ class MenuBarController: ObservableObject {
                 let response = try await APIService.shared.getSmartSurface()
 
                 await MainActor.run {
-                    // Convert recommendations to MenuBarTasks
+                    // Convert recommendations to MenuBarTasks, using real task ID from backend
                     self.priorityTasks = response.recommendations.map { rec in
                         MenuBarTask(
-                            id: UUID().uuidString,
+                            id: rec.taskId ?? "",
                             title: rec.title,
                             priority: rec.priority ?? "normal",
                             reason: rec.reason
@@ -346,14 +340,6 @@ class MenuBarController: ObservableObject {
         showDashboard()
     }
 
-    @objc private func openNotionTasks() {
-        print("📋 MenuBarController: Opening Notion Tasks...")
-        // Opens Notion app with the Tasks database
-        // Using Notion's URL scheme - the Tasks database will open
-        if let url = URL(string: "notion://www.notion.so") {
-            NSWorkspace.shared.open(url)
-        }
-    }
 
     @objc private func openPreferences() {
         print("⚙️ MenuBarController: Opening preferences...")
@@ -365,12 +351,51 @@ class MenuBarController: ObservableObject {
         )
     }
 
-    @objc private func openTaskDetail(_ sender: NSMenuItem) {
+    @objc private func completeTaskFromMenu(_ sender: NSMenuItem) {
         guard let task = sender.representedObject as? MenuBarTask else { return }
-        print("📋 MenuBarController: Opening task: \(task.title)")
 
-        // For now, open the dashboard to the task
-        showDashboard()
+        // Guard against tasks with no real backend ID (smart-surface returned no ID)
+        guard !task.id.isEmpty else {
+            let alert = NSAlert()
+            alert.messageText = "Cannot complete task"
+            alert.informativeText = "This task doesn't have a backend ID. Open TomOS to complete it manually."
+            alert.alertStyle = .warning
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+            return
+        }
+
+        // Confirm before completing to avoid accidental completions
+        let alert = NSAlert()
+        alert.messageText = "Complete Task?"
+        alert.informativeText = "\"\(task.title)\""
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "Complete ✓")
+        alert.addButton(withTitle: "Cancel")
+
+        let response = alert.runModal()
+        guard response == .alertFirstButtonReturn else { return }
+
+        print("✅ MenuBarController: Completing task: \(task.title)")
+        Task {
+            do {
+                try await APIService.shared.completeTask(taskId: task.id)
+                print("✅ Task completed successfully")
+                await MainActor.run {
+                    self.refreshTasks()
+                }
+            } catch {
+                print("❌ Failed to complete task: \(error)")
+                await MainActor.run {
+                    let errAlert = NSAlert()
+                    errAlert.messageText = "Failed to complete task"
+                    errAlert.informativeText = error.localizedDescription
+                    errAlert.alertStyle = .warning
+                    errAlert.addButton(withTitle: "OK")
+                    errAlert.runModal()
+                }
+            }
+        }
     }
 
     @objc private func quitApp() {
@@ -511,8 +536,10 @@ class MenuBarController: ObservableObject {
         // Close existing window if different content
         // Stop any animations before closing to prevent use-after-free crashes
         if let existingWindow = window {
-            existingWindow.animator().alphaValue = existingWindow.alphaValue // Cancel animations
+            NSAnimationContext.current.duration = 0  // Disable animations
+            existingWindow.orderOut(nil)  // Hide immediately without animation
             existingWindow.close()
+            window = nil
         }
 
         // Create hosting controller for SwiftUI view
@@ -659,7 +686,7 @@ struct PreferencesView: View {
             // Header
             HStack {
                 Image(systemName: "gearshape.2.fill")
-                    .font(.system(size: 32))
+                    .font(.title)
                     .foregroundStyle(.purple)
                 Text("TomOS Preferences")
                     .font(.title2.bold())

@@ -1,4 +1,5 @@
 import SwiftUI
+import TomOSShared
 
 /// TomOS App Entry Point
 ///
@@ -105,7 +106,7 @@ struct TomOSApp: App {
     /// - `tomos://smartsurface` - Open What Should I Work On?
     /// - `tomos://morning` - Send Morning Overview
     /// - `tomos://eod` - Send EOD Summary
-    /// - `tomos://tasks` - Open Notion Tasks
+    /// - `tomos://tasks` - Open TomOS web dashboard
     ///
     /// ## Usage from Raycast/Alfred:
     /// ```bash
@@ -143,10 +144,8 @@ struct TomOSApp: App {
             MenuBarController.shared.showDashboard()
 
         case "tasks":
-            // Open Notion Tasks database
-            if let notionURL = URL(string: "notion://") {
-                NSWorkspace.shared.open(notionURL)
-            }
+            // Open TomOS web dashboard (Notion integration removed — backend is PostgreSQL)
+            MenuBarController.shared.showDashboard()
 
         default:
             print("⚠️ Unknown URL action: \(action)")
@@ -154,11 +153,17 @@ struct TomOSApp: App {
 
         #elseif os(iOS)
         switch action {
-        case "capture", "braindump":
+        case "capture", "braindump", "quick-add":
+            // Widget uses "quick-add", Brain Dump is the quick capture view
             NotificationCenter.default.post(name: .openBrainDump, object: nil)
 
         case "smartsurface", "whatnext":
             NotificationCenter.default.post(name: .openSmartSurface, object: nil)
+
+        case "open":
+            // Widget "open" just opens the app (no specific navigation needed)
+            // The app will show last viewed tab automatically
+            break
 
         default:
             print("⚠️ Unknown URL action: \(action)")
